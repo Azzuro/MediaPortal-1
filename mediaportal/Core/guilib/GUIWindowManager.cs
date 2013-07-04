@@ -763,6 +763,35 @@ namespace MediaPortal.GUI.Library
       }
     }
 
+    public static void RemoveWindowFromHistory (int WindowId)
+    {
+      if (WindowId > -1)
+      {
+        if (_listHistory.Count > 1 && _listHistory.Contains(WindowId))
+        {
+          _listHistory.Remove(WindowId);
+        }
+      }
+    }
+
+    public static List<int> GetWindowHistory()
+    {
+      List<int> guiWindows = new List<int>();
+      foreach (int windowId in _listHistory)
+      {
+        guiWindows.Add(windowId);
+      }
+      return guiWindows;
+    }
+
+    public static void ClearWindowsHistory()
+    {
+      if (_listHistory != null)
+      {
+        _listHistory.Clear();
+      }
+    }
+
     private static void ActivateWindow(int newWindowId, bool replaceWindow, bool skipHistory, String loadParameter)
     {
       ActivateWindow(newWindowId, replaceWindow, skipHistory, loadParameter, false, -1);

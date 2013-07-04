@@ -146,6 +146,8 @@ namespace MediaPortal.GUI.Video
           return VideoSort.SortMethod.Year;
         case "watched":
           return VideoSort.SortMethod.Watched;
+        case "watchedcount":
+          return VideoSort.SortMethod.WatchedCount;
       }
       if (!string.IsNullOrEmpty(s))
       {
@@ -360,6 +362,9 @@ namespace MediaPortal.GUI.Video
         case VideoSort.SortMethod.Modified:
           strLine = GUILocalizeStrings.Get(1221);
           break;
+        case VideoSort.SortMethod.WatchedCount:
+          strLine = GUILocalizeStrings.Get(1330);
+          break;
       }
 
       if (btnSortBy != null)
@@ -443,7 +448,14 @@ namespace MediaPortal.GUI.Video
         GUIListItem item = facadeLayout[i];
         IMDBMovie movie = item.AlbumInfoTag as IMDBMovie;
 
-        if (movie != null && movie.ID > 0  && !isShareView && 
+        if (movie != null && CurrentSortMethod == VideoSort.SortMethod.WatchedCount)
+        {
+          if (!item.IsFolder && !item.IsBdDvdFolder)
+          {
+            item.Label2 = movie.WatchedCount.ToString();
+          }
+        }
+        else if (movie != null && movie.ID > 0  && !isShareView && 
             (!item.IsFolder || CurrentSortMethod == VideoSort.SortMethod.NameAll ))
         {
           if (CurrentSortMethod == VideoSort.SortMethod.Name || CurrentSortMethod == VideoSort.SortMethod.NameAll)
@@ -523,7 +535,14 @@ namespace MediaPortal.GUI.Video
           {
             if (item.IsFolder)
             {
-              item.Label2 = string.Empty;
+              if (!item.UserBool1)
+              {
+                item.Label2 = string.Empty;
+              }
+              else
+              {
+                item.Label2 = "DBView";
+              }
             }
             else
             {
@@ -538,7 +557,14 @@ namespace MediaPortal.GUI.Video
           {
             if (item.IsFolder)
             {
-              item.Label2 = string.Empty;
+              if (!item.UserBool1)
+              {
+                item.Label2 = string.Empty;
+              }
+              else
+              {
+                item.Label2 = "DBView";
+              }
             }
             else
             {
@@ -599,6 +625,9 @@ namespace MediaPortal.GUI.Video
         dlg.AddLocalizedString(1221); // 8 date modified
         dlg.AddLocalizedString(1220); // 9 date created
       }
+
+      dlg.AddLocalizedString(1330); // 5 Watched count
+      maxCommonSortIndex++;
       
       // set the focus to currently used sort method
 
@@ -655,6 +684,9 @@ namespace MediaPortal.GUI.Video
           break;
         case 527:
           CurrentSortMethod = VideoSort.SortMethod.Watched;
+          break;
+        case 1330:
+          CurrentSortMethod = VideoSort.SortMethod.WatchedCount;
           break;
         default:
           CurrentSortMethod = VideoSort.SortMethod.Name;

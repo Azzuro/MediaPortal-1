@@ -21,12 +21,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
-using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
+using MediaPortal.Profile;
 using MediaPortal.Util;
 using System.Web;
 using System.IO;
@@ -526,10 +527,8 @@ namespace MediaPortal.Video.Database
       _mStrTagLine = string.Empty;
       _mStrPlotOutline = string.Empty;
       _mStrPlot = string.Empty;
-      // Added userreview
       _mStrUserReview = string.Empty;
       _mStrPictureURL = string.Empty;
-      // Fanart
       _mStrFanartURL = string.Empty;
       _mStrTitle = string.Empty;
       _mStrSortTitle = string.Empty;
@@ -559,162 +558,7 @@ namespace MediaPortal.Video.Database
       _userFanart = string.Empty;
       _movieNfoFile = string.Empty;
     }
-
-    #region Database views skin properties
-
-    [Obsolete("This method is obsolete; use method SetProperties(bool isFolder, string file) instead.")]
-    public void SetProperties(bool isFolder)
-    {
-      SetProperties(isFolder, string.Empty);
-    }
-
-    public void SetProperties(bool isFolder, string file)
-    {
-      string strThumb = GetStrThumb();
-
-      GUIPropertyManager.SetProperty("#director", Director);
-      GUIPropertyManager.SetProperty("#genre", Genre.Replace(" /", ","));
-      GUIPropertyManager.SetProperty("#cast", Cast);
-      GUIPropertyManager.SetProperty("#dvdlabel", DVDLabel);
-      GUIPropertyManager.SetProperty("#imdbnumber", IMDBNumber);
-      GUIPropertyManager.SetProperty("#file", File);
-      GUIPropertyManager.SetProperty("#plot", HttpUtility.HtmlDecode(Plot));
-      GUIPropertyManager.SetProperty("#plotoutline", PlotOutline);
-      GUIPropertyManager.SetProperty("#userreview", UserReview); // Added
-      GUIPropertyManager.SetProperty("#rating", Rating.ToString());
-      GUIPropertyManager.SetProperty("#strrating", Rating.ToString(CultureInfo.CurrentCulture) + "/10");
-      GUIPropertyManager.SetProperty("#tagline", TagLine);
-      GUIPropertyManager.SetProperty("#myvideosuserfanart", UserFanart);
-      
-      // Votes
-      Int32 votes = 0;
-      string strVotes = string.Empty;
-      
-      if (Int32.TryParse(Votes.Replace(".", string.Empty).Replace(",", string.Empty), out votes))
-      {
-        strVotes = String.Format("{0:N0}", votes);
-      }
-
-      GUIPropertyManager.SetProperty("#votes", strVotes);
-      GUIPropertyManager.SetProperty("#credits", WritingCredits.Replace(" /", ","));
-      GUIPropertyManager.SetProperty("#thumb", strThumb);
-      GUIPropertyManager.SetProperty("#title", Title);
-      GUIPropertyManager.SetProperty("#year", Year.ToString());
-      // MPAA rating
-      MPARating = Util.Utils.MakeFileName(MPARating);
-      GUIPropertyManager.SetProperty("#mpaarating", MPARating);
-      GUIPropertyManager.SetProperty("#studios", Studios.Replace(" /", ","));
-      GUIPropertyManager.SetProperty("#country", Country);
-      GUIPropertyManager.SetProperty("#language", Language);
-      DateTime lastUpdate;
-      DateTime.TryParseExact(LastUpdate, "yyyy-MM-dd HH:mm:ss", 
-                             CultureInfo.CurrentCulture, 
-                             DateTimeStyles.None, 
-                             out lastUpdate);
-      GUIPropertyManager.SetProperty("#lastupdate", lastUpdate.ToShortDateString());
-
-      // Show/hide movie info labels and values in skin, set movie duration and runtime value
-      if (ID == -1)
-      {
-        if (_isEmpty) // Could be xml recordings so we need to check if movie info data is empty (movieId is -1)
-        {
-          GUIPropertyManager.SetProperty("#hideinfo", "true");
-        }
-        else
-        {
-          GUIPropertyManager.SetProperty("#hideinfo", "false");
-        }
-        
-        SetDurationProperty(VideoDatabase.GetMovieId(file));
-      }
-      else
-      {
-        SetDurationProperty(ID);
-        GUIPropertyManager.SetProperty("#hideinfo", "false");
-      }
-      
-      // Movie id property (to set random movieId property for movies not in the database -> not scanned)
-      // FA handler use this property
-      // movieId is independant and it is related to videofile
-      if (!string.IsNullOrEmpty(file))
-      {
-        SetMovieIDProperty(file, isFolder);
-      }
-      else
-      {
-        GUIPropertyManager.SetProperty("#movieid", "-1");
-      }
-
-      // Watched property
-      string strValue = "no";
-
-      if (Watched > 0 && !isFolder)
-      {
-        strValue = "yes";
-      }
-
-      if (isFolder)
-      {
-        strValue = string.Empty;
-      }
-      GUIPropertyManager.SetProperty("#iswatched", strValue);
-
-      // Watched percent property
-      GUIPropertyManager.SetProperty("#watchedpercent", WatchedPercent.ToString());
-      
-      // Watched count
-      if (!string.IsNullOrEmpty(file) && System.IO.File.Exists(file) || !string.IsNullOrEmpty(VideoFileName) && System.IO.File.Exists(VideoFileName))
-      {
-        GUIPropertyManager.SetProperty("#watchedcount", WatchedCount.ToString());
-      }
-      else
-      {
-        GUIPropertyManager.SetProperty("#watchedcount", "-1");
-      }
-      
-      // MediaInfo Properties
-      try
-      {
-        ResetMediaInfoProperties(); // Clear previous values
-
-        if (!string.IsNullOrEmpty(file))
-        {
-          SetMediaInfoProperties(file);
-        }
-      }
-        
-      catch (Exception e)
-      {
-        Log.Error("IMDBMovie Media Info error: file:{0}, error:{1}", file, e);
-      }
-    }
-
-    public void SetDurationProperty(int movieId) 
-    {
-      if (RunTime <= 0)
-      {
-        IMDBMovie movie = new IMDBMovie();
-        VideoDatabase.GetMovieInfoById(movieId, ref movie);
-        RunTime = movie.RunTime;
-      }
-
-      GUIPropertyManager.SetProperty("#runtime", RunTime + 
-                              " " +
-                              GUILocalizeStrings.Get(2998) +
-                              " (" + 
-                              Util.Utils.SecondsToHMString(RunTime * 60) + 
-                              ")");
-
-      if (Duration <= 0)
-      {
-        GUIPropertyManager.SetProperty("#videoruntime", string.Empty);
-      }
-      else
-      {
-        GUIPropertyManager.SetProperty("#videoruntime", Util.Utils.SecondsToHMSString(Duration));
-      }
-    }
-
+    
     public void SetPlayProperties()
     {
       SetPlayProperties(false);
@@ -724,7 +568,7 @@ namespace MediaPortal.Video.Database
     {
       // Title suffix for problem with covers and movie with the same name
       string strThumb = string.Empty;
-      
+
       if (!useNfo)
       {
         strThumb = GetStrThumb();
@@ -752,94 +596,15 @@ namespace MediaPortal.Video.Database
       GUIPropertyManager.SetProperty("#Play.Current.Year", Year.ToString());
       GUIPropertyManager.SetProperty("#Play.Current.Runtime", RunTime.ToString());
       GUIPropertyManager.SetProperty("#Play.Current.MPAARating", MPARating);
+      
       string strValue = "no";
+      
       if (Watched > 0)
       {
         strValue = "yes";
       }
+
       GUIPropertyManager.SetProperty("#Play.Current.IsWatched", strValue);
-    }
-
-    private void SetMovieIDProperty(string file, bool isFolder)
-    {
-      VirtualDirectory vDir = new VirtualDirectory();
-      int pin = 0;
-      vDir.LoadSettings("movies");
-
-      if (isFolder && !vDir.IsProtectedShare(file, out pin))
-      {
-        ArrayList mList = new ArrayList();
-        VideoDatabase.GetMoviesByPath(file, ref mList);
-        
-        if (mList.Count > 0)
-        {
-          Random rnd = new Random();
-          int r = rnd.Next(mList.Count);
-          IMDBMovie movieDetails = (IMDBMovie)mList[r];
-          mList.Clear();
-          VideoDatabase.GetFilesForMovie(movieDetails.ID, ref mList);
-
-          if (mList.Count > 0 && System.IO.File.Exists(mList[0].ToString()))
-          {
-            GUIPropertyManager.SetProperty("#movieid", movieDetails.ID.ToString());
-          }
-          else
-          {
-            GUIPropertyManager.SetProperty("#movieid", "-1");
-          }
-        }
-        else
-        {
-          GUIPropertyManager.SetProperty("#movieid", "-1");
-        }
-      }
-      else if (isFolder && vDir.IsProtectedShare(file, out pin))
-      {
-        GUIPropertyManager.SetProperty("#movieid", "-1");
-      }
-      else
-      {
-        GUIPropertyManager.SetProperty("#movieid", ID.ToString());
-      }
-    }
-
-    private void ResetMediaInfoProperties()
-    {
-      GUIPropertyManager.SetProperty("#VideoMediaSource", string.Empty);
-      GUIPropertyManager.SetProperty("#VideoCodec", string.Empty);
-      GUIPropertyManager.SetProperty("#VideoResolution", string.Empty);
-      GUIPropertyManager.SetProperty("#AudioCodec", string.Empty);
-      GUIPropertyManager.SetProperty("#AudioChannels", string.Empty);
-      GUIPropertyManager.SetProperty("#HasSubtitles", "false");
-      GUIPropertyManager.SetProperty("#AspectRatio", string.Empty);
-    }
-
-    private void SetMediaInfoProperties(string file)
-    {
-      SetMediaInfoProperties(file, false);
-    }
-
-    public void SetMediaInfoProperties(string file, bool refresh)
-    {
-      try
-      {
-        string hasSubtitles = "false";
-        string videoMediaSource = string.Empty;
-
-        if (MediaInfo.HasSubtitles)
-        {
-          hasSubtitles = "true";
-        }
-        
-        GUIPropertyManager.SetProperty("#VideoMediaSource", videoMediaSource);
-        GUIPropertyManager.SetProperty("#VideoCodec", Util.Utils.MakeFileName(MediaInfo.VideoCodec));
-        GUIPropertyManager.SetProperty("#VideoResolution", MediaInfo.VideoResolution);
-        GUIPropertyManager.SetProperty("#AudioCodec", Util.Utils.MakeFileName(MediaInfo.AudioCodec));
-        GUIPropertyManager.SetProperty("#AudioChannels", MediaInfo.AudioChannels);
-        GUIPropertyManager.SetProperty("#HasSubtitles", hasSubtitles);
-        GUIPropertyManager.SetProperty("#AspectRatio", MediaInfo.AspectRatio);
-      }
-      catch (Exception) { }
     }
 
     private string GetStrThumb()
@@ -848,12 +613,10 @@ namespace MediaPortal.Video.Database
       return Util.Utils.GetLargeCoverArtName(Thumbs.MovieTitle, titleExt);
     }
 
-    #endregion
-
-    #region Share view movieinfo and skin properties
+    #region Share/DB view movieinfo and skin properties
 
     /// <summary>
-    /// Use only in share view
+    /// Combined code for set movie data and skin properties for shar and database views
     /// </summary>
     /// <param name="item"></param>
     public static void SetMovieData(GUIListItem item)
@@ -928,6 +691,10 @@ namespace MediaPortal.Video.Database
               {
                 GetUserFanart(item, ref info);
               }
+              catch (ThreadAbortException)
+              {
+                // Will be logged in thread main code
+              }
               catch (Exception ex)
               {
                 Log.Error("IMDBMovie Set user fanart file property error: {0}", ex.Message);
@@ -952,6 +719,7 @@ namespace MediaPortal.Video.Database
 
             if (info.IsEmpty)
             {
+              info.DVDLabel = item.DVDLabel;
               FetchMovieNfo(path, fileName, ref info);
             }
           }
@@ -998,6 +766,10 @@ namespace MediaPortal.Video.Database
               GetUserFanart(item, ref info);
             }
           }
+          catch (ThreadAbortException)
+          {
+            // Will be logged in thread main code
+          }
           catch (Exception ex)
           {
             Log.Error("IMDBMovie Set user fanart file property error: {0}", ex.Message);
@@ -1005,11 +777,19 @@ namespace MediaPortal.Video.Database
 
           item.AlbumInfoTag = info;
         }
+        catch (ThreadAbortException)
+        {
+          // Will be logged in thread main code
+        }
         catch (Exception ex)
         {
           Log.Error("IMDBMovie SetMovieData (GetMovieInfo) error: {0}", ex.Message);
           item.AlbumInfoTag = info;
         }
+      }
+      catch (ThreadAbortException)
+      {
+        // Will be logged in thread main code
       }
       catch (Exception ex)
       {
@@ -1156,8 +936,32 @@ namespace MediaPortal.Video.Database
         string nfoFile = string.Empty;
         string nfoExt = ".nfo";
         string movienfoFile = @"\movie.nfo";
-        
-        if (filename.ToUpperInvariant().Contains("VIDEO_TS.IFO") || filename.ToUpperInvariant().Contains("INDEX.BDMV"))
+        bool isDVD = false;
+
+        if (Util.Utils.IsDVD(path) && !string.IsNullOrEmpty(movie.DVDLabel))
+        {
+          movie.CDLabel = Util.Utils.GetDriveSerial(path);
+          string discNfoLocation = string.Empty;
+
+          if (!string.IsNullOrEmpty(movie.CDLabel))
+          {
+            using (Settings xmlreader = new MPSettings())
+            {
+              discNfoLocation = xmlreader.GetValueAsString("movies", "discnfouserlocation", string.Empty);
+            }
+
+            if (!string.IsNullOrEmpty(discNfoLocation))
+            {
+              nfoFile = string.Format(@"{0}\{1}{2}", discNfoLocation, movie.CDLabel, nfoExt);
+              isDVD = true;
+            }
+          }
+          else
+          {
+            return;
+          }
+        }
+        else if (filename.ToUpperInvariant().Contains("VIDEO_TS.IFO") || filename.ToUpperInvariant().Contains("INDEX.BDMV"))
         {
           nfoFile = path + @"\" + System.IO.Path.GetFileNameWithoutExtension(filename) + nfoExt;
 
@@ -1685,7 +1489,8 @@ namespace MediaPortal.Video.Database
     }
 
     /// <summary>
-    /// Use only in share view
+    /// Sets movie skin properties from albuminfotag from item, also sets new IMDBMovie
+    /// in case albuminfotag is NULL in GUIListItem and resets movie skin properties
     /// </summary>
     /// <param name="item"></param>
     public static void SetMovieProperties(GUIListItem item)
@@ -1696,6 +1501,8 @@ namespace MediaPortal.Video.Database
 
         if (info == null)
         {
+          Log.Debug("IMDBMovie: SetMovieproperties - Movie info is NULL.");
+          ResetMovieProperties();
           return;
         }
       
@@ -1819,7 +1626,42 @@ namespace MediaPortal.Video.Database
         {
           hasSubtitles = "true";
         }
-        
+
+        // Maybe in the future
+        if (!string.IsNullOrEmpty(info.VideoFileName) && System.IO.File.Exists(info.VideoFileName))
+        {
+          if (info.VideoFileName.ToUpperInvariant().Contains(@"VIDEO_TS.IFO"))
+          {
+            videoMediaSource = "DVD";
+          }
+          else if (info.VideoFileName.ToUpperInvariant().Contains(@"INDEX.BDMV"))
+          {
+            videoMediaSource = "Bluray";
+          }
+          else if (info.VideoFileName.ToUpperInvariant().EndsWith(@".MKV"))
+          {
+            videoMediaSource = "matroska";
+          }
+          else
+          {
+            try
+            {
+              if (System.IO.Path.HasExtension(info.VideoFileName))
+              {
+                string extension = System.IO.Path.GetExtension(info.VideoFileName).Replace(".", string.Empty);
+                string extImage = GUIGraphicsContext.Skin +
+                                  @"\Media\Logos\" + extension + @".png";
+
+                if (System.IO.File.Exists(extImage))
+                {
+                  videoMediaSource = extension;
+                }
+              }
+            }
+            catch (Exception) { }
+          }
+        }
+
         GUIPropertyManager.SetProperty("#VideoMediaSource", videoMediaSource);
         GUIPropertyManager.SetProperty("#VideoCodec", Util.Utils.MakeFileName(info.MediaInfo.VideoCodec));
         GUIPropertyManager.SetProperty("#VideoResolution", info.MediaInfo.VideoResolution);
@@ -1828,8 +1670,6 @@ namespace MediaPortal.Video.Database
         GUIPropertyManager.SetProperty("#HasSubtitles", hasSubtitles);
         GUIPropertyManager.SetProperty("#AspectRatio", info.MediaInfo.AspectRatio);
         GUIPropertyManager.SetProperty("#myvideosuserfanart", info.UserFanart);
-
-        
       }
       catch (Exception ex)
       {
@@ -1877,9 +1717,8 @@ namespace MediaPortal.Video.Database
       GUIPropertyManager.SetProperty("#AspectRatio", string.Empty);
       GUIPropertyManager.SetProperty("#myvideosuserfanart", string.Empty);
     }
-
+    
     #endregion
-
     
   }
 }

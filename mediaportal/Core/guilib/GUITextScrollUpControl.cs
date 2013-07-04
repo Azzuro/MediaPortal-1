@@ -537,7 +537,7 @@ namespace MediaPortal.GUI.Library
         int iLastSpaceInLine = -1;
         string szLine = "";
         strText = strText.Replace("\r", " ");
-        strText.Trim();
+        strText = strText.Trim();
         while (pos < strText.Length)
         {
           // Get the current letter in the string

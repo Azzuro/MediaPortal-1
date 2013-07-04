@@ -1320,6 +1320,27 @@ namespace MediaPortal.GUI.Video
       if (g_Player.IsVideo)
       {
         dlg.AddLocalizedString(1064); // Bookmarks
+
+        // Video Playlist prev-next video
+        PlayList pl = playlistPlayer.GetPlaylist(playlistPlayer.CurrentPlaylistType);
+        int index = playlistPlayer.CurrentSong;
+
+        if (pl.Count > 1)
+        {
+          if (pl.Count - 1 == index)
+          {
+            dlg.AddLocalizedString(1351);
+          }
+          else if (index == 0)
+          {
+            dlg.AddLocalizedString(1350);
+          }
+          else
+          {
+            dlg.AddLocalizedString(1350);
+            dlg.AddLocalizedString(1351);
+          }
+        }
       }
 
       _IsDialogVisible = true;
@@ -1386,6 +1407,14 @@ namespace MediaPortal.GUI.Video
 
         case 200091:
           ShowChapterStreamsMenu();
+          break;
+
+        case 1350:
+          playlistPlayer.PlayNext();
+          break;
+        
+        case 1351:
+          playlistPlayer.PlayPrevious();
           break;
       }
     }

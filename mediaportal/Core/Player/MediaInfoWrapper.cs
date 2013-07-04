@@ -174,11 +174,25 @@ namespace MediaPortal.Player
         providerNumber.NumberDecimalSeparator = ".";
 
         //Video
-        double.TryParse(_mI.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, providerNumber,
-                        out _framerate);
+        string frameRateMode = _mI.Get(StreamKind.Video, 0, "FrameRate_Mode").ToLower();
+        if (!frameRateMode.Contains("vfr"))
+        {
+          double.TryParse(_mI.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, providerNumber,
+                          out _framerate);
+        }
+        else
+        {
+          double.TryParse(_mI.Get(StreamKind.Video, 0, "FrameRate_Original"), NumberStyles.AllowDecimalPoint, providerNumber,
+                          out _framerate);
+          if (_framerate == 0.0)
+          {
+            double.TryParse(_mI.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, providerNumber,
+                          out _framerate);
+          }
+        }
         int.TryParse(_mI.Get(StreamKind.Video, 0, "Width"), out _width);
         int.TryParse(_mI.Get(StreamKind.Video, 0, "Height"), out _height);
-        _aspectRatio = _mI.Get(StreamKind.Video, 0, "Display AspectRatio") == "4:3" ? "fullscreen" : "widescreen";
+        _aspectRatio = _mI.Get(StreamKind.Video, 0, "DisplayAspectRatio/String") == "4:3" ? "fullscreen" : "widescreen";
         _videoCodec = GetFullCodecName(StreamKind.Video);
         _scanType = _mI.Get(StreamKind.Video, 0, "ScanType").ToLowerInvariant();
         _isInterlaced = _scanType.Contains("interlaced");
@@ -200,7 +214,14 @@ namespace MediaPortal.Player
 
         if (_videoDuration == 0)
         {
-          int.TryParse(_mI.Get(StreamKind.Video, 0, "Duration"), out _videoDuration);
+          if (frameRateMode.ToUpperInvariant() != "VFR")
+          {
+            int.TryParse(_mI.Get(StreamKind.Video, 0, "Duration"), out _videoDuration);
+          }
+          else
+          {
+            int.TryParse(_mI.Get(StreamKind.General, 0, "Duration"), out _videoDuration);
+          }
         }
 
         //Audio

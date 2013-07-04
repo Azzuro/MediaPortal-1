@@ -565,7 +565,7 @@ namespace MediaPortal.GUI.Music
 
       else
       {
-        Math.Min(files.Length, numFilesToCheck);
+        checkCount = Math.Min(files.Length, numFilesToCheck);
       }
 
       MusicTag tag = null;

@@ -1094,6 +1094,9 @@
     <String id="1321">Auto Decoder Settings</String>
     <String id="1322">Force Source Splitter</String>
     <String id="1323">Video Codecs for .TS files</String>
+    <String id="1330">Watched Count</String>
+    <String id="1350">Play next video</String>
+    <String id="1351">Play previous video</String>
     <String id="1440" prefix="My ">Teletext</String>
     <String id="1441">Teletext</String>
     <String id="1442">Scroll speed (horizontal)</String>

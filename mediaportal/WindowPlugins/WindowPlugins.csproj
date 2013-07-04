@@ -248,7 +248,6 @@
     <Compile Include="GUIPictures\PictureSort.cs" />
     <Compile Include="GUISettings\BluRay\GUISettingsBluRay.cs" />
     <Compile Include="GUISettings\MyVideos\GUISettingsMyVideos_OtherSettings.cs" />
-    <Compile Include="GUISettings\Weather\GUISettingsWeather.cs" />
     <Compile Include="GUIVideoFiles\SelectBDHandler.cs" />
     <Compile Include="GUISettings\General\GeneralMP\GUISettingsGeneral_Resume.cs" />
     <Compile Include="GUISettings\General\GeneralMP\GUISettingsGeneral_GeneralMP.cs" />
@@ -275,6 +274,15 @@
     <Compile Include="GUISettings\MyPictures\GUISettingsPictures.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GUIVideoFiles\VideosFileWatcher\DelayedVideosFileSystemWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUIVideoFiles\VideosFileWatcher\VideosShareWatcherEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUIVideoFiles\VideosFileWatcher\VideosShareWatcherHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StateBase.cs" />
     <Compile Include="WindowPluginBase.cs" />
     <Compile Include="GUIDisc\GUIDisc.cs" />
@@ -291,10 +299,8 @@
     <Compile Include="GUISettings\TV\GUISettingsTv.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GUITetris\MyTetrisControl.cs" />
     <Compile Include="GUIVideoFiles\MatroskaTagLib.cs" />
     <Compile Include="GUIVideoFiles\SelectDVDHandler.cs" />
-    <Compile Include="GUIWeather\WeatherChannel.cs" />
     <Compile Include="Home\GUIHome.cs" />
     <Compile Include="Home\GUIHomeBaseWindow.cs" />
     <Compile Include="Home\GUIHomeSetupForm.cs">
@@ -342,96 +348,6 @@
     <Compile Include="GUIPictures\GUISlideShow.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GUIRSSFeed\DBBool.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\DetailsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\ExceptionCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\GUIRSSFeed.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssCategory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssCategoryCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssChannel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssChannelCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssCloud.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssCompact.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssDefault.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssElement.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssEnclosure.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssEnumerators.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssFeed.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssFeedCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssGuid.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssImage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssItemCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssModule.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssModuleCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssModuleItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssModuleItemCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssModuleItemCollectionCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssTextInput.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\RssWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIRSSFeed\SetupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GUISettings\DVD\GUISettingsDVD.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -463,16 +379,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GUISettings\MyMusic\MusicDatabaseReorg.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUINumberPlace\CellControl.cs" />
-    <Compile Include="GUINumberPlace\Grid.cs" />
-    <Compile Include="GUINumberPlace\GUINumberPlace.cs" />
-    <Compile Include="GUINumberPlace\Solver.cs" />
-    <Compile Include="GUITetris\MyTetris.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUITetris\Tetris.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GUITopbar\GUITopbar.cs">
@@ -519,15 +425,6 @@
     <Compile Include="GUIVideoFiles\VideoViewHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GUIWeather\Geochron.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIWeather\GUIWindowWeather.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GUIWikipedia\WikipediaImage.cs" />
-    <Compile Include="GUIWikipedia\GUIWikipedia.cs" />
-    <Compile Include="GUIWikipedia\WikipediaArticle.cs" />
     <Compile Include="Home\GUIBasicHome.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -540,14 +437,6 @@
     <EmbeddedResource Include="Home\GUIHomeSetupForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GUIHomeSetupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUIRSSFeed\DetailsForm.resx">
-      <DependentUpon>DetailsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUIRSSFeed\GUIRSSFeed.DetailsForm.resources" />
-    <EmbeddedResource Include="GUIRSSFeed\GUIRSSFeed.SetupForm.resources" />
-    <EmbeddedResource Include="GUIRSSFeed\SetupForm.resx">
-      <DependentUpon>SetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUITopbar\TopBarSetupForm.resx">
       <DependentUpon>TopBarSetupForm.cs</DependentUpon>
@@ -562,12 +451,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUIRSSFeed\rssicon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUIRSSFeed\rssicon_disabled.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="GUIMusic\Music.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -580,24 +463,6 @@
     <EmbeddedResource Include="GUIVideoFiles\VideoDisabled.gif" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUITetris\Tetris.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUITetris\TetrisDisabled.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUIWeather\Weather.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUIWeather\WeatherDisabled.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUIWikipedia\Wikipedia.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUIWikipedia\WikipediaDisabled.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="GUIPictures\Pictures.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -608,12 +473,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUISettings\SettingsDisabled.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUINumberPlace\NumberPlace.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUINumberPlace\NumberPlaceDisabled.gif" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Home\Homemenu.gif" />
@@ -633,7 +492,9 @@
   <ItemGroup>
     <EmbeddedResource Include="GUIDisc\DVDDisabled.gif" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GUISettings\Weather\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

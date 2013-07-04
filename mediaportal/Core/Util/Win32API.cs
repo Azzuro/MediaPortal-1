@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -162,7 +164,7 @@ namespace MediaPortal.Util
 
     [DllImport("wininet.dll")]
     private static extern bool InternetGetConnectedState(out int Description, int ReservedValue);
-
+    
     // Takes the CSIDL of a folder and returns the pathname.
     [DllImport("shell32.dll")]
     public static extern Int32 SHGetFolderPath(
@@ -405,8 +407,18 @@ namespace MediaPortal.Util
 #if DEBUG
       return true;
 #else
-      int Desc;
-      return InternetGetConnectedState(out Desc, 0);
+      try
+      {
+        using (var client = new WebClient())
+        using (var stream = client.OpenRead("http://www.google.com"))
+        {
+          return true;
+        }
+      }
+      catch
+      {
+        return false;
+      }
 #endif
     }
 

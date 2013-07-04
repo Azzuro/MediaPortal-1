@@ -71,6 +71,12 @@ namespace MediaPortal.GUI.Library
     private bool _retrieveCoverArtAllowed = true;
     private int _dimColor = 0x60ffffff;
     private bool _isBdDvdFolder = false; // is DVD or BD rip folder
+    private bool _userBool1 = false; // Bool Free usage1
+    private bool _userBool2 = false; // Bool Free usage2
+    private bool _userBool3 = false; // Bool Free usage3
+    private string _userString1 = string.Empty; // String Free usage
+    private string _userString2 = string.Empty; // String Free usage
+    private string _userString3 = string.Empty; // String Free usage
 
     /// <summary>
     /// The (empty) constructor of the GUIListItem.
@@ -409,6 +415,41 @@ namespace MediaPortal.GUI.Library
     {
       get { return _isBdDvdFolder; }
       set { _isBdDvdFolder = value; }
+    }
+    public bool UserBool1
+    {
+      get { return _userBool1; }
+      set { _userBool1 = value; }
+    }
+
+    public bool UserBool2
+    {
+      get { return _userBool2; }
+      set { _userBool2 = value; }
+    }
+
+    public bool UserBool3
+    {
+      get { return _userBool3; }
+      set { _userBool3 = value; }
+    }
+
+    public string UserString1
+    {
+      get { return _userString1; }
+      set { _userString1 = value; }
+    }
+
+    public string UserString2
+    {
+      get { return _userString2; }
+      set { _userString2 = value; }
+    }
+
+    public string UserString3
+    {
+      get { return _userString3; }
+      set { _userString3 = value; }
     }
 
     /// <summary>

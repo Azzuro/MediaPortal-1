@@ -975,17 +975,9 @@ namespace MediaPortal.GUI.Video
         Log.Error("GUIVideoInfo: Error creating new thumbs for {0} - {1}", _currentMovie.ThumbURL, ex2.Message);
       }
       
-      ArrayList files = new ArrayList();
-      VideoDatabase.GetFilesForMovie(_currentMovie.ID, ref files);
-        
-      if (files.Count > 0)
-      {
-        _currentMovie.SetProperties(false, (string) files[0]);
-      }
-      else
-      {
-        _currentMovie.SetProperties(false, string.Empty);
-      }
+      GUIListItem item = new GUIListItem();
+      item.AlbumInfoTag = _currentMovie;
+      IMDBMovie.SetMovieProperties(item);
     }
 
     private void  RenameTitle ()
@@ -1055,6 +1047,8 @@ namespace MediaPortal.GUI.Video
           GUIVideoFiles.CurrentSelectedGUIItem.ThumbnailImage = newLargeThumb;
         }
       }
+
+      Refresh(false);
     }
 
     private void ResetSpinControl()
@@ -1204,7 +1198,12 @@ namespace MediaPortal.GUI.Video
         
         GUIListItem item = listActors.SelectedListItem;
         item.AlbumInfoTag = _currentMovie;
-        IMDBFetcher.FetchMovieActor(this, _currentMovie, selectedActor, item.ItemId);
+        
+        if (Win32API.IsConnectedToInternet())
+        {
+          IMDBFetcher.FetchMovieActor(this, _currentMovie, selectedActor, item.ItemId);
+        }
+
         actor = VideoDatabase.GetActorInfo(item.ItemId);
 
         if (actor == null)
@@ -1705,7 +1704,15 @@ namespace MediaPortal.GUI.Video
         tmdbSearch.SearchCovers(movie.Title, movie.IMDBNumber);
         // IMPAward search
         IMPAwardsSearch impSearch = new IMPAwardsSearch();
-        impSearch.SearchCovers(movie.Title, movie.IMDBNumber);
+        
+        if (movie.Year > 1900)
+        {
+          impSearch.SearchCovers(movie.Title + " " + movie.Year, movie.IMDBNumber);
+        }
+        else
+        {
+          impSearch.SearchCovers(movie.Title, movie.IMDBNumber);
+        }
 
         int thumb = 0;
 
@@ -1757,6 +1764,7 @@ namespace MediaPortal.GUI.Video
         {
           thumbUrls[pictureIndex++] = movie.ThumbURL;
         }
+        
         // IMP Award check and add
         if ((impSearch.Count > 0) && (impSearch[0] != string.Empty))
         {

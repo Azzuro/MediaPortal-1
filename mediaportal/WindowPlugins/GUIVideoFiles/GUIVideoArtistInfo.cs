@@ -318,18 +318,18 @@ namespace MediaPortal.GUI.Video
 
     private void SetNewproperties()
     {
+      _currentActor.SortActorMoviesByYear();
+
       for (int i = 0; i < _currentActor.Count; ++i)
       {
         string line = String.Format("{0}. {1} ({2})",
                                     _currentActor[i].Year,
                                     _currentActor[i].MovieTitle,
                                     _currentActor[i].Role);
-        line.Replace("()", string.Empty).Trim();
-
         //List view
         var item = new GUIListItem();
         item.ItemId = i;
-        item.Label = line; // Year+Title+Role (visible on screen item)
+        item.Label = line.Replace("()", string.Empty).Trim(); // Year+Title+Role (visible on screen item)
         
         if (_currentActor[i].MoviePlot == "-" || _currentActor[i].MoviePlot == Strings.Unknown)
         {
@@ -753,8 +753,7 @@ namespace MediaPortal.GUI.Video
             if (count > 0)
             {
               int percCount = (100 * countCurrent) / count;
-              //GUIPropertyManager.SetProperty("#Actor.Name", _currentActor.Name + "   (" + countCurrent + "/" + count + ")");
-              GUIPropertyManager.SetProperty("#Actor.Name", _currentActor.Name + "   (" + percCount + "%)");
+              GUIPropertyManager.SetProperty("#Actor.Name", _currentActor.Name + "   (" + countCurrent + "/" + count + " - " + +percCount + "%" + ")");
               countCurrent += 1;
             }
             //
@@ -833,8 +832,7 @@ namespace MediaPortal.GUI.Video
                                     ListItemMovieInfo(item).Year,
                                     ListItemMovieInfo(item).MovieTitle,
                                     ListItemMovieInfo(item).Role);
-      line.Replace("()", string.Empty).Trim();
-      tempItemLabel = line; // Year+Title+Role (visible on screen item)
+      tempItemLabel = line.Replace("()", string.Empty).Trim(); // Year+Title+Role (visible on screen item)
       item.Label = tempItemLabel;
     }
 

@@ -237,7 +237,7 @@ namespace MediaPortal.GUI.Library
         }
         else
         {
-          String.Format("?{0}?", _intValue);
+          wszText = String.Format("?{0}?", _intValue);
         }
       }
 

@@ -2252,6 +2252,9 @@ public class MediaPortalApp : D3D, IRender
 
     ReOpenDBs();
 
+    // Restart MEPO
+    Utils.RestartMePo();
+
     Log.Info("Main: OnResume - Init Input Devices");
     InputDevices.Init();
       
@@ -3492,8 +3495,30 @@ public class MediaPortalApp : D3D, IRender
             }
             break;
 
-          // DVD: goto previous chapter
-          // play previous item from playlist;
+          case Action.ActionType.ACTION_PLAYLIST_PLAY_NEXT_VIDEO:
+          case Action.ActionType.ACTION_PLAYLIST_PLAY_PREVIOUS_VIDEO:
+            
+            if (g_Player.IsVideo)
+            {
+              MediaPortal.Playlists.PlayList pl = PlaylistPlayer.GetPlaylist(PlaylistPlayer.CurrentPlaylistType);
+              int pIndex = PlaylistPlayer.CurrentSong;
+ 
+              if (pl.Count > 1)
+              {
+                if (pl.Count - 1 > pIndex && action.wID == Action.ActionType.ACTION_PLAYLIST_PLAY_NEXT_VIDEO)
+                {
+                  PlaylistPlayer.PlayNext();
+                }
+                else if (pIndex > 0 && action.wID ==  Action.ActionType.ACTION_PLAYLIST_PLAY_PREVIOUS_VIDEO)
+                {
+                  PlaylistPlayer.PlayPrevious();
+                }
+              }
+            }
+            break;
+
+            //DVD: goto previous chapter
+            //play previous item from playlist;
           case Action.ActionType.ACTION_PREV_ITEM:
           case Action.ActionType.ACTION_PREV_CHAPTER:
             if (g_Player.IsDVD || g_Player.HasChapters)
@@ -4205,10 +4230,27 @@ public class MediaPortalApp : D3D, IRender
           // reset idle timer for consistent timing after end 0f playback
           SetThreadExecutionState(EXECUTION_STATE.ES_SYSTEM_REQUIRED | EXECUTION_STATE.ES_DISPLAY_REQUIRED);
           break;
+
+        case GUIMessage.MessageType.GUI_MSG_ADD_REMOVABLE_DRIVE:
+          if (!Utils.IsRemovable(message.Label))
+          {
+            VirtualDirectories.Instance.Movies.AddRemovableDrive(message.Label, message.Label2);
+            VirtualDirectories.Instance.Music.AddRemovableDrive(message.Label, message.Label2);
+            VirtualDirectories.Instance.Pictures.AddRemovableDrive(message.Label, message.Label2);
+          }
+          break;  
+
+        case GUIMessage.MessageType.GUI_MSG_REMOVE_REMOVABLE_DRIVE:
+          if (!Utils.IsRemovable(message.Label))
+          {
+            VirtualDirectories.Instance.Movies.Remove(message.Label);
+            VirtualDirectories.Instance.Music.Remove(message.Label);
+            VirtualDirectories.Instance.Pictures.Remove(message.Label);
+          } 
+          break;
       }
     }
   }
-
 
   /// <summary>
   /// 
