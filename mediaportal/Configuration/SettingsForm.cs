@@ -97,6 +97,9 @@ namespace MediaPortal.Configuration
     private SectionSettings _previousSection = null;
     private RemoteDirectInput dinputRemote;
     private RemoteSerialUIR serialuir;
+    private Process _processStartMP;
+
+    #endregion
 
     private static ConfigSplashScreen splashScreen = new ConfigSplashScreen();
 
@@ -140,7 +143,6 @@ namespace MediaPortal.Configuration
 
     #endregion
 
-    #endregion
 
     public SettingsForm()
       : this(false) {}
@@ -904,8 +906,12 @@ namespace MediaPortal.Configuration
       {
         return;
       }
-
       Close();
+      if (cbRestartMPWhenExit.Checked) //Restart MediaPortal at exit is checked
+      {
+        Thread.Sleep(1000);
+        RestartMediaPortalWhenExit();
+      }
     }
 
     private void okButton_Click(object sender, EventArgs e)
@@ -916,6 +922,11 @@ namespace MediaPortal.Configuration
         return;
       }
       Close();
+      if (cbRestartMPWhenExit.Checked) //Restart MediaPortal at exit is checked  
+      {
+        Thread.Sleep(1000);
+        RestartMediaPortalWhenExit();
+      }      
     }
 
     private bool MusicScanRunning()
@@ -941,6 +952,21 @@ namespace MediaPortal.Configuration
 
       return false;
     }
+
+      // Function for Restart MediaPortal When Exit Config. 
+    private void RestartMediaPortalWhenExit()
+    {
+        _processStartMP = new Process
+        {
+            StartInfo =
+            {
+                WorkingDirectory = Application.StartupPath,
+                FileName = "mediaportal.exe",
+            }
+        };
+        _processStartMP.Start();
+    }
+
 
 
     /// <summary>
@@ -1168,6 +1194,11 @@ namespace MediaPortal.Configuration
     {
       ToggleSectionVisibility(toolStripButtonSwitchAdvanced.Checked);
       toolStripButtonSwitchAdvanced.Text = AdvancedMode ? "Switch to standard mode" : "Switch to expert mode";
+    }
+
+    private void cbRestartMPWhenExit_CheckedChanged(object sender, EventArgs e)
+    {
+
     }
   }
 }
