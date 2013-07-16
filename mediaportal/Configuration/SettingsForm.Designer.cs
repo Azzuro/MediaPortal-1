@@ -21,6 +21,7 @@
     private System.Windows.Forms.Panel holderPanel;
     private MediaPortal.UserInterface.Controls.MPGradientLabel headerLabel;
     private MediaPortal.UserInterface.Controls.MPButton applyButton;
+    private UserInterface.Controls.MPCheckBox cbRestartMPWhenExit;
 
     /// <summary>
     /// Clean up any resources being used.
@@ -46,8 +47,7 @@
     /// </summary>
     private void InitializeComponent()
     {
-      System.ComponentModel.ComponentResourceManager resources =
-        new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
       this.sectionTree = new System.Windows.Forms.TreeView();
       this.cancelButton = new MediaPortal.UserInterface.Controls.MPButton();
       this.okButton = new MediaPortal.UserInterface.Controls.MPButton();
@@ -64,15 +64,14 @@
       this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.skinsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripButtonSwitchAdvanced = new System.Windows.Forms.ToolStripButton();
+      this.cbRestartMPWhenExit = new MediaPortal.UserInterface.Controls.MPCheckBox();
       this.toolStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // sectionTree
       // 
-      this.sectionTree.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-           | System.Windows.Forms.AnchorStyles.Left)));
+      this.sectionTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
       this.sectionTree.FullRowSelect = true;
       this.sectionTree.HideSelection = false;
       this.sectionTree.HotTracking = true;
@@ -82,14 +81,12 @@
       this.sectionTree.Name = "sectionTree";
       this.sectionTree.Size = new System.Drawing.Size(184, 486);
       this.sectionTree.TabIndex = 2;
-      this.sectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.sectionTree_AfterSelect);
       this.sectionTree.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.sectionTree_BeforeSelect);
+      this.sectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.sectionTree_AfterSelect);
       // 
       // cancelButton
       // 
-      this.cancelButton.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
       this.cancelButton.Location = new System.Drawing.Point(621, 537);
       this.cancelButton.Name = "cancelButton";
@@ -101,9 +98,7 @@
       // 
       // okButton
       // 
-      this.okButton.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.okButton.Location = new System.Drawing.Point(540, 537);
       this.okButton.Name = "okButton";
       this.okButton.Size = new System.Drawing.Size(75, 23);
@@ -114,14 +109,11 @@
       // 
       // headerLabel
       // 
-      this.headerLabel.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-           | System.Windows.Forms.AnchorStyles.Right)));
+      this.headerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.headerLabel.Caption = "";
       this.headerLabel.FirstColor = System.Drawing.SystemColors.InactiveCaption;
-      this.headerLabel.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular,
-                                                      System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.headerLabel.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.headerLabel.LastColor = System.Drawing.Color.WhiteSmoke;
       this.headerLabel.Location = new System.Drawing.Point(216, 28);
       this.headerLabel.Name = "headerLabel";
@@ -130,16 +122,13 @@
       this.headerLabel.TabIndex = 3;
       this.headerLabel.TabStop = false;
       this.headerLabel.TextColor = System.Drawing.Color.WhiteSmoke;
-      this.headerLabel.TextFont = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular,
-                                                          System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.headerLabel.TextFont = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       // 
       // holderPanel
       // 
-      this.holderPanel.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-           | System.Windows.Forms.AnchorStyles.Right)));
+      this.holderPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.holderPanel.AutoScroll = true;
       this.holderPanel.BackColor = System.Drawing.SystemColors.Control;
       this.holderPanel.Location = new System.Drawing.Point(216, 58);
@@ -149,10 +138,8 @@
       // 
       // beveledLine1
       // 
-      this.beveledLine1.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-           | System.Windows.Forms.AnchorStyles.Right)));
+      this.beveledLine1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.beveledLine1.Location = new System.Drawing.Point(8, 527);
       this.beveledLine1.Name = "beveledLine1";
       this.beveledLine1.Size = new System.Drawing.Size(696, 2);
@@ -161,9 +148,7 @@
       // 
       // applyButton
       // 
-      this.applyButton.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.applyButton.Location = new System.Drawing.Point(459, 537);
       this.applyButton.Name = "applyButton";
       this.applyButton.Size = new System.Drawing.Size(75, 23);
@@ -176,9 +161,7 @@
       // 
       // linkLabel1
       // 
-      this.linkLabel1.Anchor =
-        ((System.Windows.Forms.AnchorStyles)
-         ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.linkLabel1.AutoSize = true;
       this.linkLabel1.Location = new System.Drawing.Point(12, 542);
       this.linkLabel1.Name = "linkLabel1";
@@ -186,18 +169,15 @@
       this.linkLabel1.TabIndex = 9;
       this.linkLabel1.TabStop = true;
       this.linkLabel1.Text = "Donate to MediaPortal";
-      this.linkLabel1.LinkClicked +=
-        new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+      this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
       // 
       // toolStrip1
       // 
       this.toolStrip1.ImeMode = System.Windows.Forms.ImeMode.On;
-      this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-                                       {
-                                         this.helpToolStripSplitButton,
-                                         this.configToolStripSplitButton,
-                                         this.toolStripButtonSwitchAdvanced
-                                       });
+      this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpToolStripSplitButton,
+            this.configToolStripSplitButton,
+            this.toolStripButtonSwitchAdvanced});
       this.toolStrip1.Location = new System.Drawing.Point(0, 0);
       this.toolStrip1.Name = "toolStrip1";
       this.toolStrip1.Size = new System.Drawing.Size(712, 25);
@@ -217,13 +197,11 @@
       // 
       // configToolStripSplitButton
       // 
-      this.configToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
-                                                               {
-                                                                 this.thumbsToolStripMenuItem,
-                                                                 this.logsToolStripMenuItem,
-                                                                 this.databaseToolStripMenuItem,
-                                                                 this.skinsToolStripMenuItem
-                                                               });
+      this.configToolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.thumbsToolStripMenuItem,
+            this.logsToolStripMenuItem,
+            this.databaseToolStripMenuItem,
+            this.skinsToolStripMenuItem});
       this.configToolStripSplitButton.Image = global::MediaPortal.Configuration.Properties.Resources.icon_folder;
       this.configToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.configToolStripSplitButton.Name = "configToolStripSplitButton";
@@ -269,13 +247,24 @@
       this.toolStripButtonSwitchAdvanced.AutoSize = false;
       this.toolStripButtonSwitchAdvanced.CheckOnClick = true;
       this.toolStripButtonSwitchAdvanced.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-      this.toolStripButtonSwitchAdvanced.Image =
-        ((System.Drawing.Image)(resources.GetObject("toolStripButtonSwitchAdvanced.Image")));
+      this.toolStripButtonSwitchAdvanced.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSwitchAdvanced.Image")));
       this.toolStripButtonSwitchAdvanced.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.toolStripButtonSwitchAdvanced.Name = "toolStripButtonSwitchAdvanced";
       this.toolStripButtonSwitchAdvanced.Size = new System.Drawing.Size(135, 22);
       this.toolStripButtonSwitchAdvanced.Text = "Switch to expert mode";
       this.toolStripButtonSwitchAdvanced.Click += new System.EventHandler(this.toolStripButtonSwitchAdvanced_Click);
+      // 
+      // cbRestartMPWhenExit
+      // 
+      this.cbRestartMPWhenExit.AutoSize = true;
+      this.cbRestartMPWhenExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.cbRestartMPWhenExit.Location = new System.Drawing.Point(312, 543);
+      this.cbRestartMPWhenExit.Name = "cbRestartMPWhenExit";
+      this.cbRestartMPWhenExit.Size = new System.Drawing.Size(141, 17);
+      this.cbRestartMPWhenExit.TabIndex = 11;
+      this.cbRestartMPWhenExit.Text = "Start MediaPortal at exit.";
+      this.cbRestartMPWhenExit.UseVisualStyleBackColor = true;
+      this.cbRestartMPWhenExit.CheckedChanged += new System.EventHandler(this.cbRestartMPWhenExit_CheckedChanged);
       // 
       // SettingsForm
       // 
@@ -284,6 +273,7 @@
       this.AutoScroll = true;
       this.CancelButton = this.cancelButton;
       this.ClientSize = new System.Drawing.Size(712, 568);
+      this.Controls.Add(this.cbRestartMPWhenExit);
       this.Controls.Add(this.toolStrip1);
       this.Controls.Add(this.linkLabel1);
       this.Controls.Add(this.applyButton);
@@ -296,12 +286,13 @@
       this.Name = "SettingsForm";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "MediaPortal - Configuration";
-      this.Load += new System.EventHandler(this.SettingsForm_Load);
       this.Closed += new System.EventHandler(this.SettingsForm_Closed);
+      this.Load += new System.EventHandler(this.SettingsForm_Load);
       this.toolStrip1.ResumeLayout(false);
       this.toolStrip1.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
+
     }
 
     #endregion
