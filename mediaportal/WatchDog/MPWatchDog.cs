@@ -183,7 +183,7 @@ namespace WatchDog
       }
       _tempDir += "MPTemp";
       _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) +
-                 "\\MediaPortalLogs_[date]__[time].zip";
+                 "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
       if (!ParseCommandLine())
       {
         Application.Exit();
