@@ -44,6 +44,7 @@ namespace WatchDog
 
     private const string Default4To3Skin = "Default";
     private const string Default16To9Skin = "Titan";
+    private static string[] logNames = { "Application", "System" };
 
     #endregion
 
@@ -531,12 +532,12 @@ namespace WatchDog
       }
     }
 
-    private void menuItem15_Click(object sender, EventArgs e) // Stop Tvservice
+    private void menuItem15_Click(object sender, EventArgs e) // Stop TVService
     {
       StopTVService();
     }
         
-    private void menuItem16_Click(object sender, EventArgs e)
+    private void menuItem16_Click(object sender, EventArgs e) // Start TVService
     {
       StartTVService();
     }
@@ -544,17 +545,15 @@ namespace WatchDog
     public void StartTVService() // http://msdn.microsoft.com/en-us/library/yb9w7ytd.aspx
     {
       ServiceController TVservice  = new ServiceController();
-TVservice.ServiceName = "TVService";
-Console.WriteLine("The TVService status is currently set to {0}", 
+      TVservice.ServiceName = "TVService";
+      Console.WriteLine("The TVService status is currently set to {0}", 
                    TVservice.Status.ToString());
-
-if (TVservice.Status == ServiceControllerStatus.Stopped)
-{
+      if (TVservice.Status == ServiceControllerStatus.Stopped)
+      {
   // Start the service if the current status is stopped.
-
-  Console.WriteLine("Starting TVService...");
-  try
-  {
+        Console.WriteLine("Starting TVService...");
+        try
+        {
     // Start the service, and wait until its status is "Running".
     TVservice.Start();
     TVservice.WaitForStatus(ServiceControllerStatus.Running);
@@ -562,12 +561,12 @@ if (TVservice.Status == ServiceControllerStatus.Stopped)
     // Display the current service status.
     Console.WriteLine("The Alerter service status is now set to {0}.",
                        TVservice.Status.ToString());
-  }
-  catch (InvalidOperationException)
-  {
-    Console.WriteLine("Could not start the TVService.");
-  }
-}
+        }
+        catch (InvalidOperationException)
+        {
+          Console.WriteLine("Could not start the TVService.");
+        }
+      }
     }
 
     public void StopTVService() //http://msdn.microsoft.com/en-us/library/system.serviceprocess.servicecontroller.stop.aspx 
@@ -596,6 +595,91 @@ if (TVservice.Status == ServiceControllerStatus.Stopped)
       TVService.Refresh();
       Console.WriteLine("The TVService status is now set to {0}.",
                          TVService.Status.ToString());
+    }
+    public void ClearMPLog_Event()
+    {
+      ClearEventLog();
+      ClearMPLogDir();
+    }
+
+    private void ClearEventLog()
+    {
+      Update();
+      int subActions = logNames.Length;
+      foreach (string strLogName in logNames)
+      {
+        EventLog e = new EventLog(strLogName);
+        try
+        {
+          e.Clear();
+        }
+        catch (Exception) { }
+      }
+      if (subActions == 0)
+      {
+      }
+    }
+    private void ClearDir(string strDir)
+    {
+      string[] files = Directory.GetFiles(strDir);
+      string[] dirs = Directory.GetDirectories(strDir);
+
+      int subActions = files.Length + dirs.Length;
+
+      foreach (string file in files)
+      {
+        if (File.Exists(file))
+        {
+          try
+          {
+            File.Delete(file);
+          }
+          catch (Exception) {}
+        }
+      }
+
+      foreach (string dir in dirs)
+      {
+        if (Directory.Exists(dir))
+        {
+          try
+          {
+            Directory.Delete(dir, true);
+          }
+          catch (Exception) {}
+        }
+      }
+
+      if (subActions == 0)
+      {
+       
+      }
+    }
+
+    private void ClearMPLogDir()
+    {
+      Update();
+      ClearDir(Config.GetFolder(Config.Dir.Log));
+    }
+
+    private void menuItem17_Click(object sender, EventArgs e)
+    {
+      ClearMPLogDir();
+    }
+
+    private void menuItem19_Click(object sender, EventArgs e)
+    {
+      ClearMPLog_Event();
+    }
+
+    private void menuItem18_Click(object sender, EventArgs e)
+    {
+      ClearEventLog();
+    }
+
+    private void menuItem12_Click(object sender, EventArgs e)
+    {
+
     }
   }
 }

@@ -47,6 +47,9 @@ namespace WatchDog
       this.menuItem9 = new System.Windows.Forms.MenuItem();
       this.menuItem10 = new System.Windows.Forms.MenuItem();
       this.menuItem11 = new System.Windows.Forms.MenuItem();
+      this.menuItem17 = new System.Windows.Forms.MenuItem();
+      this.menuItem18 = new System.Windows.Forms.MenuItem();
+      this.menuItem19 = new System.Windows.Forms.MenuItem();
       this.menuItem12 = new System.Windows.Forms.MenuItem();
       this.menuItem13 = new System.Windows.Forms.MenuItem();
       this.menuItem14 = new System.Windows.Forms.MenuItem();
@@ -205,7 +208,7 @@ namespace WatchDog
       this.menuItem9.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem10,
             this.menuItem14});
-      this.menuItem9.Text = "4. Manual Control";
+      this.menuItem9.Text = "4. Advanced Control";
       // 
       // menuItem10
       // 
@@ -219,12 +222,35 @@ namespace WatchDog
       // menuItem11
       // 
       this.menuItem11.Index = 0;
+      this.menuItem11.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem17,
+            this.menuItem18,
+            this.menuItem19});
       this.menuItem11.Text = "MediaPortal Client";
+      // 
+      // menuItem17
+      // 
+      this.menuItem17.Index = 0;
+      this.menuItem17.Text = "Log Files";
+      this.menuItem17.Click += new System.EventHandler(this.menuItem17_Click);
+      // 
+      // menuItem18
+      // 
+      this.menuItem18.Index = 1;
+      this.menuItem18.Text = "Events";
+      this.menuItem18.Click += new System.EventHandler(this.menuItem18_Click);
+      // 
+      // menuItem19
+      // 
+      this.menuItem19.Index = 2;
+      this.menuItem19.Text = "Both";
+      this.menuItem19.Click += new System.EventHandler(this.menuItem19_Click);
       // 
       // menuItem12
       // 
       this.menuItem12.Index = 1;
       this.menuItem12.Text = "TV server";
+      this.menuItem12.Click += new System.EventHandler(this.menuItem12_Click);
       // 
       // menuItem13
       // 
@@ -383,5 +409,8 @@ namespace WatchDog
     private System.Windows.Forms.MenuItem menuItem14;
     private System.Windows.Forms.MenuItem menuItem15;
     private System.Windows.Forms.MenuItem menuItem16;
+    private System.Windows.Forms.MenuItem menuItem17;
+    private System.Windows.Forms.MenuItem menuItem18;
+    private System.Windows.Forms.MenuItem menuItem19;
   }
 }
