@@ -44,6 +44,14 @@ namespace WatchDog
       this.menuItem4 = new System.Windows.Forms.MenuItem();
       this.menuItem8 = new System.Windows.Forms.MenuItem();
       this.menuItem5 = new System.Windows.Forms.MenuItem();
+      this.menuItem9 = new System.Windows.Forms.MenuItem();
+      this.menuItem10 = new System.Windows.Forms.MenuItem();
+      this.menuItem11 = new System.Windows.Forms.MenuItem();
+      this.menuItem12 = new System.Windows.Forms.MenuItem();
+      this.menuItem13 = new System.Windows.Forms.MenuItem();
+      this.menuItem14 = new System.Windows.Forms.MenuItem();
+      this.menuItem15 = new System.Windows.Forms.MenuItem();
+      this.menuItem16 = new System.Windows.Forms.MenuItem();
       this.menuItem6 = new System.Windows.Forms.MenuItem();
       this.menuItem7 = new System.Windows.Forms.MenuItem();
       this.statusBar = new System.Windows.Forms.StatusBar();
@@ -58,8 +66,8 @@ namespace WatchDog
       // 
       // settingsGroup
       // 
-      this.settingsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.settingsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.settingsGroup.Controls.Add(this.btnZipFile);
       this.settingsGroup.Controls.Add(this.tbZipFile);
       this.settingsGroup.Controls.Add(this.logDirLabel);
@@ -96,16 +104,16 @@ namespace WatchDog
       // 
       // label3
       // 
-      this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                  | System.Windows.Forms.AnchorStyles.Left)
-                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.label3.Location = new System.Drawing.Point(12, 288);
       this.label3.Name = "label3";
       this.label3.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
       this.label3.Size = new System.Drawing.Size(403, 59);
       this.label3.TabIndex = 9;
       this.label3.Text = "If MediaPortal crashes unexpectedly, or if you can not reproduce an issue nicely," +
-          " then this option will simply export all the currently available log files.";
+    " then this option will simply export all the currently available log files.";
       // 
       // ExportLogsRadioButton
       // 
@@ -121,16 +129,16 @@ namespace WatchDog
       // 
       // label1
       // 
-      this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                  | System.Windows.Forms.AnchorStyles.Left)
-                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.label1.Location = new System.Drawing.Point(12, 124);
       this.label1.Name = "label1";
       this.label1.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
       this.label1.Size = new System.Drawing.Size(403, 59);
       this.label1.TabIndex = 1;
       this.label1.Text = "This will start MediaPortal using the default skin, and only plugins which were p" +
-          "art of the release version you installed. No extensions will be loaded.";
+    "art of the release version you installed. No extensions will be loaded.";
       // 
       // SafeModeRadioButton
       // 
@@ -161,6 +169,7 @@ namespace WatchDog
       // 
       // menuItem2
       // 
+      this.menuItem2.Checked = true;
       this.menuItem2.Index = 0;
       this.menuItem2.Text = "Exit";
       this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
@@ -171,7 +180,8 @@ namespace WatchDog
       this.menuItem3.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem4,
             this.menuItem8,
-            this.menuItem5});
+            this.menuItem5,
+            this.menuItem9});
       this.menuItem3.Text = "Action";
       // 
       // menuItem4
@@ -188,6 +198,58 @@ namespace WatchDog
       // 
       this.menuItem5.Index = 2;
       this.menuItem5.Text = "3. Perform post-test actions";
+      // 
+      // menuItem9
+      // 
+      this.menuItem9.Index = 3;
+      this.menuItem9.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem10,
+            this.menuItem14});
+      this.menuItem9.Text = "4. Manual Control";
+      // 
+      // menuItem10
+      // 
+      this.menuItem10.Index = 0;
+      this.menuItem10.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem11,
+            this.menuItem12,
+            this.menuItem13});
+      this.menuItem10.Text = "Clean Log files";
+      // 
+      // menuItem11
+      // 
+      this.menuItem11.Index = 0;
+      this.menuItem11.Text = "MediaPortal Client";
+      // 
+      // menuItem12
+      // 
+      this.menuItem12.Index = 1;
+      this.menuItem12.Text = "TV server";
+      // 
+      // menuItem13
+      // 
+      this.menuItem13.Index = 2;
+      this.menuItem13.Text = "Both";
+      // 
+      // menuItem14
+      // 
+      this.menuItem14.Index = 1;
+      this.menuItem14.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem15,
+            this.menuItem16});
+      this.menuItem14.Text = "Tv Service";
+      // 
+      // menuItem15
+      // 
+      this.menuItem15.Index = 0;
+      this.menuItem15.Text = "Stop Tv Service";
+      this.menuItem15.Click += new System.EventHandler(this.menuItem15_Click);
+      // 
+      // menuItem16
+      // 
+      this.menuItem16.Index = 1;
+      this.menuItem16.Text = "Start Tv Service";
+      this.menuItem16.Click += new System.EventHandler(this.menuItem16_Click);
       // 
       // menuItem6
       // 
@@ -250,16 +312,16 @@ namespace WatchDog
       // 
       // label2
       // 
-      this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                  | System.Windows.Forms.AnchorStyles.Left)
-                  | System.Windows.Forms.AnchorStyles.Right)));
+      this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.label2.Location = new System.Drawing.Point(12, 206);
       this.label2.Name = "label2";
       this.label2.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
       this.label2.Size = new System.Drawing.Size(391, 59);
       this.label2.TabIndex = 2;
       this.label2.Text = "Besides setting the log level to \"debug\", this option will start MediaPortal as c" +
-          "onfigured, using all extensions you have installed.";
+    "onfigured, using all extensions you have installed.";
       // 
       // MPWatchDog
       // 
@@ -313,5 +375,13 @@ namespace WatchDog
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Button ProceedButton;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.MenuItem menuItem9;
+    private System.Windows.Forms.MenuItem menuItem10;
+    private System.Windows.Forms.MenuItem menuItem11;
+    private System.Windows.Forms.MenuItem menuItem12;
+    private System.Windows.Forms.MenuItem menuItem13;
+    private System.Windows.Forms.MenuItem menuItem14;
+    private System.Windows.Forms.MenuItem menuItem15;
+    private System.Windows.Forms.MenuItem menuItem16;
   }
 }

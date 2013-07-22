@@ -33,6 +33,8 @@ using MediaPortal.Configuration;
 using MediaPortal.Profile;
 using WatchDog.Properties;
 using Settings = MediaPortal.Profile.Settings;
+using System.ServiceProcess;
+using System.Security.Principal;
 
 namespace WatchDog
 {
@@ -126,7 +128,7 @@ namespace WatchDog
           process.WaitForExit();
         }
         // ReSharper disable EmptyGeneralCatchClause
-        catch {}
+        catch { }
         // ReSharper restore EmptyGeneralCatchClause
       }
 
@@ -225,7 +227,7 @@ namespace WatchDog
     private bool ParseCommandLine()
     {
       string[] args = Environment.GetCommandLineArgs();
-      for (int i = 1; i < args.Length;)
+      for (int i = 1; i < args.Length; )
       {
         switch (args[i].ToLowerInvariant())
         {
@@ -521,12 +523,79 @@ namespace WatchDog
           {
             PerformPostTestActions();
             string mpExe = Config.GetFolder(Config.Dir.Base) + "\\MediaPortal.exe";
-            var mp = new Process {StartInfo = {FileName = mpExe}};
+            var mp = new Process { StartInfo = { FileName = mpExe } };
             mp.Start();
             Close();
           }
         }
       }
+    }
+
+    private void menuItem15_Click(object sender, EventArgs e) // Stop Tvservice
+    {
+      StopTVService();
+    }
+        
+    private void menuItem16_Click(object sender, EventArgs e)
+    {
+      StartTVService();
+    }
+
+    public void StartTVService() // http://msdn.microsoft.com/en-us/library/yb9w7ytd.aspx
+    {
+      ServiceController TVservice  = new ServiceController();
+TVservice.ServiceName = "TVService";
+Console.WriteLine("The TVService status is currently set to {0}", 
+                   TVservice.Status.ToString());
+
+if (TVservice.Status == ServiceControllerStatus.Stopped)
+{
+  // Start the service if the current status is stopped.
+
+  Console.WriteLine("Starting TVService...");
+  try
+  {
+    // Start the service, and wait until its status is "Running".
+    TVservice.Start();
+    TVservice.WaitForStatus(ServiceControllerStatus.Running);
+
+    // Display the current service status.
+    Console.WriteLine("The Alerter service status is now set to {0}.",
+                       TVservice.Status.ToString());
+  }
+  catch (InvalidOperationException)
+  {
+    Console.WriteLine("Could not start the TVService.");
+  }
+}
+    }
+
+    public void StopTVService() //http://msdn.microsoft.com/en-us/library/system.serviceprocess.servicecontroller.stop.aspx 
+    {
+      ServiceController TVService = new ServiceController("TVService");
+      Console.WriteLine("The TVService status is currently set to {0}",
+                        TVService.Status.ToString());
+
+      if ((TVService.Status.Equals(ServiceControllerStatus.Stopped)) ||
+           (TVService.Status.Equals(ServiceControllerStatus.StopPending)))
+      {
+        // Start the service if the current status is stopped.
+
+        Console.WriteLine("Starting the TVService...");
+        TVService.Start();
+      }
+      else
+      {
+        // Stop the service if its status is not set to "Stopped".
+
+        Console.WriteLine("Stopping the TVService...");
+        TVService.Stop();
+      }
+
+      // Refresh and display the current service status.
+      TVService.Refresh();
+      Console.WriteLine("The TVService status is now set to {0}.",
+                         TVService.Status.ToString());
     }
   }
 }
