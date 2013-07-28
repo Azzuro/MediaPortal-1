@@ -36,8 +36,7 @@ namespace MediaPortal.GUI.Video
   /// objects and detection of duplicate events.
   /// 
   ///  Code published by Adrian Hamza on
-  ///  http://blogs.gotdotnet.com/ahamza/archive/2006/02/04/FileSystemWatcher-Duplicate-Events.aspx
-  ///  http://blogs.msdn.com/b/ahamza/archive/2006/02/04/filesystemwatcher-duplicate-events.aspx
+  ///  http://blogs.gotdotnet.com/ahamza/archive/2006/02/04/FileSystemWatcher_Duplicate_Events.aspx
   /// 
   /// </summary>
   internal class DelayedEvent

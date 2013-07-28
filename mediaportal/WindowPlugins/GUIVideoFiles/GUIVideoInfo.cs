@@ -276,8 +276,10 @@ namespace MediaPortal.GUI.Video
       // Database and share views windows are only screens which do that
       if (newWindowId == (int)Window.WINDOW_VIDEOS || newWindowId == (int)Window.WINDOW_VIDEO_TITLE)
         _currentMovie = null;
-      
+
       GUIPropertyManager.SetProperty("#actorThumb", string.Empty);
+      GUIPropertyManager.SetProperty("#actorlastUpdate", string.Empty);
+
       ReleaseResources();
       base.OnPageDestroy(newWindowId);
     }
@@ -1082,6 +1084,12 @@ namespace MediaPortal.GUI.Video
         if (item != null)
         {
           GUIPropertyManager.SetProperty("#actorThumb", item.ThumbnailImage);
+          GUIPropertyManager.SetProperty("#actorlastUpdate", item.UserString1);
+        }
+        else
+        {
+          GUIPropertyManager.SetProperty("#actorThumb", string.Empty);
+          GUIPropertyManager.SetProperty("#actorlastUpdate", string.Empty);
         }
       }
       catch (Exception ex)
@@ -1128,7 +1136,22 @@ namespace MediaPortal.GUI.Video
           item.Label = temp[1] + " - " + temp[3]; // Actor name + role
           item.Label2 = temp[1]; // Actor name
           item.Label3 = temp[2]; // Actor IMDB Id
-          
+
+          IMDBActor actorInfo = new IMDBActor();
+          actorInfo = VideoDatabase.GetActorInfo(item.ItemId);
+
+          if (actorInfo != null)
+          {
+            DateTime lastUpdate;
+            DateTime.TryParseExact(actorInfo.LastUpdate, "yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture,
+                                   DateTimeStyles.None, out lastUpdate);
+            item.UserString1 = lastUpdate.ToShortDateString();
+          }
+          else
+          {
+            item.UserString1 = "N/A";
+          }
+
           string largeThumb = Util.Utils.GetLargeCoverArtName(Thumbs.MovieActors, item.ItemId.ToString()); // Actor thumb filename
           
           if (!File.Exists(largeThumb))

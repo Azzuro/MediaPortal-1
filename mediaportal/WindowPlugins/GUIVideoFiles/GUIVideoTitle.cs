@@ -768,7 +768,7 @@ namespace MediaPortal.GUI.Video
       }
 
       // F3 key actor info action
-      if (movie.ActorID >= 0)
+      if (movie.ActorID > 0)
       {
         IMDBActor actor = VideoDatabase.GetActorInfo(movie.ActorID);
 
@@ -1705,7 +1705,7 @@ namespace MediaPortal.GUI.Video
       }
       else if (e.Error != null)
       {
-        Log.Error("GuiVideoTitle SetThumbsError: " + e.Error.Message);
+        Log.Error("GuiVideoTitle SetThumbsError: {0}", e.Error.Message);
       }
 
       _isSetThumbsRunning= false;
@@ -1901,7 +1901,7 @@ namespace MediaPortal.GUI.Video
 
     private void OnDeleteItem(GUIListItem item)
     {
-      if (item.IsRemote)
+      if (item.IsRemote || item.IsFolder && !item.IsBdDvdFolder)
       {
         return;
       }
@@ -1935,7 +1935,7 @@ namespace MediaPortal.GUI.Video
         return;
       }
 
-      DoDeleteItem(item);
+      VideoDatabase.DeleteMovieInfoById(movie.ID);
       currentSelectedItem = facadeLayout.SelectedListItemIndex;
 
       if (currentSelectedItem > 0)
@@ -1948,31 +1948,6 @@ namespace MediaPortal.GUI.Video
       if (currentSelectedItem >= 0)
       {
         GUIControl.SelectItemControl(GetID, facadeLayout.GetID, currentSelectedItem);
-      }
-    }
-
-    private void DoDeleteItem(GUIListItem item)
-    {
-      IMDBMovie movie = item.AlbumInfoTag as IMDBMovie;
-
-      if (movie == null)
-      {
-        return;
-      }
-
-      if (movie.ID < 0)
-      {
-        return;
-      }
-
-      if (item.IsFolder)
-      {
-        return;
-      }
-
-      if (!item.IsRemote)
-      {
-        VideoDatabase.DeleteMovieInfoById(movie.ID);
       }
     }
     
