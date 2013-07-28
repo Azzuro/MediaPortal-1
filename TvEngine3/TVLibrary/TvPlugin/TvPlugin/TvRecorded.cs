@@ -36,6 +36,7 @@ using TvControl;
 using TvDatabase;
 using Action = MediaPortal.GUI.Library.Action;
 using Layout = MediaPortal.GUI.Library.GUIFacadeControl.Layout;
+using System.Management;
 
 namespace TvPlugin
 {
