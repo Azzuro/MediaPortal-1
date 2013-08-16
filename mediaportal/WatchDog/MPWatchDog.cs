@@ -168,7 +168,7 @@ namespace WatchDog
     {
       _zipFile = tbZipFile.Text;
       return _zipFile
-        .Replace("[date]", DateTime.Now.ToString("dd_MM_yy"))
+        .Replace("[date]", DateTime.Now.ToString("yy_MM_dd"))
         .Replace("[time]", DateTime.Now.ToString("HH_mm"));
     }
 
