@@ -716,5 +716,10 @@ namespace WatchDog
       tbZipFile.Text = _zipFile;
       //MessageBox.Show(_zipFile, "MediaPortal WatchDog -- Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
+
+    private void miCleanLogBoth_Click(object sender, EventArgs e)
+    {
+
+    }
   }
 }

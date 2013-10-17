@@ -276,8 +276,10 @@ namespace WatchDog
       // 
       // miCleanLogBoth
       // 
+      this.miCleanLogBoth.Enabled = false;
       this.miCleanLogBoth.Index = 2;
       this.miCleanLogBoth.Text = "Both";
+      this.miCleanLogBoth.Click += new System.EventHandler(this.miCleanLogBoth_Click);
       // 
       // menuItem14
       // 
