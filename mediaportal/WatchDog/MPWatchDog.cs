@@ -178,6 +178,7 @@ namespace WatchDog
 
     public MPWatchDog()
     {
+      // Read Watchdog setting from XML files
       _watchdogAppDir = Directory.GetCurrentDirectory() + "\\watchdog.xml";
 
       using (Settings xmlreader = new Settings(_watchdogAppDir, false))
@@ -708,7 +709,7 @@ namespace WatchDog
       }
     }
 
-    private void button1_Click(object sender, EventArgs e)
+    private void btnZipFileReset_Click(object sender, EventArgs e)
     {
       _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
          + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
