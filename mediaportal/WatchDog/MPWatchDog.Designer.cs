@@ -48,14 +48,15 @@ namespace WatchDog
       this.menuItem9 = new System.Windows.Forms.MenuItem();
       this.menuItem10 = new System.Windows.Forms.MenuItem();
       this.menuItem11 = new System.Windows.Forms.MenuItem();
-      this.menuItem17 = new System.Windows.Forms.MenuItem();
-      this.menuItem18 = new System.Windows.Forms.MenuItem();
-      this.menuItem19 = new System.Windows.Forms.MenuItem();
+      this.miCleanMPCLog = new System.Windows.Forms.MenuItem();
+      this.miCleanMpCEvents = new System.Windows.Forms.MenuItem();
+      this.miCleanMpClogAndEvent = new System.Windows.Forms.MenuItem();
       this.menuItem12 = new System.Windows.Forms.MenuItem();
-      this.menuItem13 = new System.Windows.Forms.MenuItem();
+      this.miCleanTVsLog = new System.Windows.Forms.MenuItem();
+      this.miCleanLogBoth = new System.Windows.Forms.MenuItem();
       this.menuItem14 = new System.Windows.Forms.MenuItem();
-      this.menuItem15 = new System.Windows.Forms.MenuItem();
-      this.menuItem16 = new System.Windows.Forms.MenuItem();
+      this.miStopTvService = new System.Windows.Forms.MenuItem();
+      this.miStartTvService = new System.Windows.Forms.MenuItem();
       this.menuItem6 = new System.Windows.Forms.MenuItem();
       this.menuItem7 = new System.Windows.Forms.MenuItem();
       this.statusBar = new System.Windows.Forms.StatusBar();
@@ -229,66 +230,74 @@ namespace WatchDog
       this.menuItem10.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem11,
             this.menuItem12,
-            this.menuItem13});
+            this.miCleanLogBoth});
       this.menuItem10.Text = "Clean Log files";
       // 
       // menuItem11
       // 
       this.menuItem11.Index = 0;
       this.menuItem11.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem17,
-            this.menuItem18,
-            this.menuItem19});
+            this.miCleanMPCLog,
+            this.miCleanMpCEvents,
+            this.miCleanMpClogAndEvent});
       this.menuItem11.Text = "MediaPortal Client";
       // 
-      // menuItem17
+      // miCleanMPCLog
       // 
-      this.menuItem17.Index = 0;
-      this.menuItem17.Text = "Log Files";
-      this.menuItem17.Click += new System.EventHandler(this.menuItem17_Click);
+      this.miCleanMPCLog.Index = 0;
+      this.miCleanMPCLog.Text = "Log Files";
+      this.miCleanMPCLog.Click += new System.EventHandler(this.miCleanMPCLog_Click);
       // 
-      // menuItem18
+      // miCleanMpCEvents
       // 
-      this.menuItem18.Index = 1;
-      this.menuItem18.Text = "Events";
-      this.menuItem18.Click += new System.EventHandler(this.menuItem18_Click);
+      this.miCleanMpCEvents.Index = 1;
+      this.miCleanMpCEvents.Text = "Events";
+      this.miCleanMpCEvents.Click += new System.EventHandler(this.miCleanMpCEvents_Click);
       // 
-      // menuItem19
+      // miCleanMpClogAndEvent
       // 
-      this.menuItem19.Index = 2;
-      this.menuItem19.Text = "Both";
-      this.menuItem19.Click += new System.EventHandler(this.menuItem19_Click);
+      this.miCleanMpClogAndEvent.Index = 2;
+      this.miCleanMpClogAndEvent.Text = "Both";
+      this.miCleanMpClogAndEvent.Click += new System.EventHandler(this.miCleanMpClogAndEvent_Click);
       // 
       // menuItem12
       // 
       this.menuItem12.Index = 1;
+      this.menuItem12.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.miCleanTVsLog});
       this.menuItem12.Text = "TV server";
       this.menuItem12.Click += new System.EventHandler(this.menuItem12_Click);
       // 
-      // menuItem13
+      // miCleanTVsLog
       // 
-      this.menuItem13.Index = 2;
-      this.menuItem13.Text = "Both";
+      this.miCleanTVsLog.Enabled = false;
+      this.miCleanTVsLog.Index = 0;
+      this.miCleanTVsLog.Text = "Log files";
+      // 
+      // miCleanLogBoth
+      // 
+      this.miCleanLogBoth.Index = 2;
+      this.miCleanLogBoth.Text = "Both";
       // 
       // menuItem14
       // 
       this.menuItem14.Index = 1;
       this.menuItem14.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem15,
-            this.menuItem16});
+            this.miStopTvService,
+            this.miStartTvService});
       this.menuItem14.Text = "Tv Service";
       // 
-      // menuItem15
+      // miStopTvService
       // 
-      this.menuItem15.Index = 0;
-      this.menuItem15.Text = "Stop Tv Service";
-      this.menuItem15.Click += new System.EventHandler(this.menuItem15_Click);
+      this.miStopTvService.Index = 0;
+      this.miStopTvService.Text = "Stop Tv Service";
+      this.miStopTvService.Click += new System.EventHandler(this.miStopTvService_Click);
       // 
-      // menuItem16
+      // miStartTvService
       // 
-      this.menuItem16.Index = 1;
-      this.menuItem16.Text = "Start Tv Service";
-      this.menuItem16.Click += new System.EventHandler(this.menuItem16_Click);
+      this.miStartTvService.Index = 1;
+      this.miStartTvService.Text = "Start Tv Service";
+      this.miStartTvService.Click += new System.EventHandler(this.miStartTvService_Click);
       // 
       // menuItem6
       // 
@@ -418,13 +427,14 @@ namespace WatchDog
     private System.Windows.Forms.MenuItem menuItem10;
     private System.Windows.Forms.MenuItem menuItem11;
     private System.Windows.Forms.MenuItem menuItem12;
-    private System.Windows.Forms.MenuItem menuItem13;
+    private System.Windows.Forms.MenuItem miCleanLogBoth;
     private System.Windows.Forms.MenuItem menuItem14;
-    private System.Windows.Forms.MenuItem menuItem15;
-    private System.Windows.Forms.MenuItem menuItem16;
-    private System.Windows.Forms.MenuItem menuItem17;
-    private System.Windows.Forms.MenuItem menuItem18;
-    private System.Windows.Forms.MenuItem menuItem19;
+    private System.Windows.Forms.MenuItem miStopTvService;
+    private System.Windows.Forms.MenuItem miStartTvService;
+    private System.Windows.Forms.MenuItem miCleanMPCLog;
+    private System.Windows.Forms.MenuItem miCleanMpCEvents;
+    private System.Windows.Forms.MenuItem miCleanMpClogAndEvent;
     private System.Windows.Forms.Button btnZipFileReset;
+    private System.Windows.Forms.MenuItem miCleanTVsLog;
   }
 }

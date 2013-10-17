@@ -551,12 +551,12 @@ namespace WatchDog
       }
     }
 
-    private void menuItem15_Click(object sender, EventArgs e) // Stop TVService
+    private void miStopTvService_Click(object sender, EventArgs e) // Stop TVService
     {
       StopTVService();
     }
         
-    private void menuItem16_Click(object sender, EventArgs e) // Start TVService
+    private void miStartTvService_Click(object sender, EventArgs e) // Start TVService
     {
       StartTVService();
     }
@@ -615,7 +615,7 @@ namespace WatchDog
       Console.WriteLine("The TVService status is now set to {0}.",
                          TVService.Status.ToString());
     }
-    public void ClearMPLog_Event()
+    public void ClearMPLog_and_Event()
     {
       ClearEventLog();
       ClearMPLogDir();
@@ -681,17 +681,17 @@ namespace WatchDog
       ClearDir(Config.GetFolder(Config.Dir.Log));
     }
 
-    private void menuItem17_Click(object sender, EventArgs e)
+    private void miCleanMPCLog_Click(object sender, EventArgs e) // Clean MP client Log Files
     {
       ClearMPLogDir();
     }
 
-    private void menuItem19_Click(object sender, EventArgs e)
+    private void miCleanMpClogAndEvent_Click(object sender, EventArgs e) // Clean MP Client Logs and Events miCleanMpClogAndEvent_Click
     {
-      ClearMPLog_Event();
+      ClearMPLog_and_Event();
     }
 
-    private void menuItem18_Click(object sender, EventArgs e)
+    private void miCleanMpCEvents_Click(object sender, EventArgs e) // Clean MP Client Events
     {
       ClearEventLog();
     }
