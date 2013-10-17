@@ -179,7 +179,7 @@ namespace WatchDog
     public MPWatchDog()
     {
       // Read Watchdog setting from XML files
-      _watchdogAppDir = Directory.GetCurrentDirectory() + "\\watchdog.xml";
+      _watchdogAppDir = Config.GetFile(Config.Dir.Config , "watchdog.xml");
 
       using (Settings xmlreader = new Settings(_watchdogAppDir, false))
       {
