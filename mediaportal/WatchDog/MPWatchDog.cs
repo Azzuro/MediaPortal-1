@@ -62,6 +62,8 @@ namespace WatchDog
     private readonly List<string> _knownPids = new List<string>();
     private bool _safeMode;
     private int GraphsCreated { get; set; }
+    private string _watchdogtargetDir = "";
+    private string _watchdogAppDir = "";
 
     #endregion
 
@@ -176,6 +178,13 @@ namespace WatchDog
 
     public MPWatchDog()
     {
+      _watchdogAppDir = Directory.GetCurrentDirectory() + "\\watchdog.xml";
+
+      using (Settings xmlreader = new Settings(_watchdogAppDir, false))
+      {
+        _watchdogtargetDir = xmlreader.GetValueAsString("general", "watchdogTargetDir", "");
+      }
+     
       GraphsCreated = 0;
       Thread.CurrentThread.Name = "MPWatchDog";
       InitializeComponent();
@@ -185,8 +194,17 @@ namespace WatchDog
         _tempDir += "\\";
       }
       _tempDir += "MPTemp";
-      _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) +
-                 "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
+      
+      if (_watchdogtargetDir == string.Empty)
+      {
+        _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) 
+          + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
+      }
+      else
+      {
+        _zipFile = _watchdogtargetDir + "\\MediaPortalLogs_[date]__[time].zip";
+      }
+      
       if (!ParseCommandLine())
       {
         Application.Exit();
@@ -680,6 +698,22 @@ namespace WatchDog
     private void menuItem12_Click(object sender, EventArgs e)
     {
 
+    }
+
+    private void tbZipFile_TextChanged(object sender, EventArgs e)
+    {
+      using (var xmlwriter = new Settings(_watchdogAppDir, false))
+      {
+        xmlwriter.SetValue("general", "watchdogTargetDir", Utils.GetDirectoryName(tbZipFile.Text));
+      }
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+      _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+         + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
+      tbZipFile.Text = _zipFile;
+      //MessageBox.Show(_zipFile, "MediaPortal WatchDog -- Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
   }
 }

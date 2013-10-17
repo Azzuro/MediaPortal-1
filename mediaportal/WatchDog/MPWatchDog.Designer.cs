@@ -30,6 +30,7 @@ namespace WatchDog
     {
       this.components = new System.ComponentModel.Container();
       this.settingsGroup = new System.Windows.Forms.GroupBox();
+      this.button1 = new System.Windows.Forms.Button();
       this.btnZipFile = new System.Windows.Forms.Button();
       this.tbZipFile = new System.Windows.Forms.TextBox();
       this.logDirLabel = new System.Windows.Forms.Label();
@@ -71,6 +72,7 @@ namespace WatchDog
       // 
       this.settingsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.settingsGroup.Controls.Add(this.button1);
       this.settingsGroup.Controls.Add(this.btnZipFile);
       this.settingsGroup.Controls.Add(this.tbZipFile);
       this.settingsGroup.Controls.Add(this.logDirLabel);
@@ -80,6 +82,16 @@ namespace WatchDog
       this.settingsGroup.TabIndex = 2;
       this.settingsGroup.TabStop = false;
       this.settingsGroup.Text = "Settings";
+      // 
+      // button1
+      // 
+      this.button1.Location = new System.Drawing.Point(333, 57);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(64, 23);
+      this.button1.TabIndex = 4;
+      this.button1.Text = "Reset";
+      this.button1.UseVisualStyleBackColor = true;
+      this.button1.Click += new System.EventHandler(this.button1_Click);
       // 
       // btnZipFile
       // 
@@ -96,6 +108,7 @@ namespace WatchDog
       this.tbZipFile.Name = "tbZipFile";
       this.tbZipFile.Size = new System.Drawing.Size(321, 20);
       this.tbZipFile.TabIndex = 2;
+      this.tbZipFile.TextChanged += new System.EventHandler(this.tbZipFile_TextChanged);
       // 
       // logDirLabel
       // 
@@ -412,5 +425,6 @@ namespace WatchDog
     private System.Windows.Forms.MenuItem menuItem17;
     private System.Windows.Forms.MenuItem menuItem18;
     private System.Windows.Forms.MenuItem menuItem19;
+    private System.Windows.Forms.Button button1;
   }
 }
