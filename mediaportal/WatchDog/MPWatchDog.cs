@@ -551,7 +551,7 @@ namespace WatchDog
       }
     }
 
-    private void menuItem15_Click(object sender, EventArgs e) // Stop TVService
+    private void miStopTvService_Click(object sender, EventArgs e) // Stop TVService
     {
       try
       {
@@ -563,7 +563,7 @@ namespace WatchDog
       }
     }
         
-    private void menuItem16_Click(object sender, EventArgs e) // Start TVService
+    private void miStartTvService_Click(object sender, EventArgs e) // Start TVService
     {
       try
       {
@@ -632,7 +632,7 @@ namespace WatchDog
                            TVService.Status.ToString()));
       }
     }
-    public void ClearMPLog_Event()
+    public void ClearMPLog_and_Event()
     {
       ClearEventLog();
       ClearMPLogDir();
@@ -698,17 +698,17 @@ namespace WatchDog
       ClearDir(Config.GetFolder(Config.Dir.Log));
     }
 
-    private void menuItem17_Click(object sender, EventArgs e)
+    private void miCleanMPCLog_Click(object sender, EventArgs e) // Clean MP client Log Files
     {
       ClearMPLogDir();
     }
 
-    private void menuItem19_Click(object sender, EventArgs e)
+    private void miCleanMpClogAndEvent_Click(object sender, EventArgs e) // Clean MP Client Logs and Events miCleanMpClogAndEvent_Click
     {
-      ClearMPLog_Event();
+      ClearMPLog_and_Event();
     }
 
-    private void menuItem18_Click(object sender, EventArgs e)
+    private void miCleanMpCEvents_Click(object sender, EventArgs e) // Clean MP Client Events
     {
       ClearEventLog();
     }
@@ -732,6 +732,11 @@ namespace WatchDog
          + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
       tbZipFile.Text = _zipFile;
       //MessageBox.Show(_zipFile, "MediaPortal WatchDog -- Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+
+    private void miCleanLogBoth_Click(object sender, EventArgs e)
+    {
+
     }
   }
 }
