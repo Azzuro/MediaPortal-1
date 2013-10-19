@@ -559,7 +559,7 @@ namespace WatchDog
       }
       catch (InvalidOperationException)
       {
-        SetStatus("Could not stop the TVService.");
+        SetStatus("Could not stop the TVService. Admin rights needed");
       }
     }
         
@@ -571,7 +571,7 @@ namespace WatchDog
       }
       catch (InvalidOperationException)
       {
-        SetStatus("Could not start the TVService.");
+        SetStatus("Could not start the TVService. Admin rights needed");
       }
     }
 
@@ -648,6 +648,7 @@ namespace WatchDog
         try
         {
           e.Clear();
+          SetStatus(string.Format("Events Log Cleared"));
         }
         catch (Exception) { }
       }
@@ -696,6 +697,7 @@ namespace WatchDog
     {
       Update();
       ClearDir(Config.GetFolder(Config.Dir.Log));
+      SetStatus(string.Format("MP Client Log Folder Cleared"));
     }
 
     private void miCleanMPCLog_Click(object sender, EventArgs e) // Clean MP client Log Files

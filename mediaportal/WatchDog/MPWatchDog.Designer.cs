@@ -46,6 +46,7 @@ namespace WatchDog
       this.menuItem8 = new System.Windows.Forms.MenuItem();
       this.menuItem5 = new System.Windows.Forms.MenuItem();
       this.menuItem9 = new System.Windows.Forms.MenuItem();
+      this.menuItem13 = new System.Windows.Forms.MenuItem();
       this.menuItem10 = new System.Windows.Forms.MenuItem();
       this.menuItem11 = new System.Windows.Forms.MenuItem();
       this.miCleanMPCLog = new System.Windows.Forms.MenuItem();
@@ -57,6 +58,18 @@ namespace WatchDog
       this.menuItem14 = new System.Windows.Forms.MenuItem();
       this.miStopTvService = new System.Windows.Forms.MenuItem();
       this.miStartTvService = new System.Windows.Forms.MenuItem();
+      this.menuItem32 = new System.Windows.Forms.MenuItem();
+      this.menuItem33 = new System.Windows.Forms.MenuItem();
+      this.menuItem15 = new System.Windows.Forms.MenuItem();
+      this.menuItem16 = new System.Windows.Forms.MenuItem();
+      this.menuItem18 = new System.Windows.Forms.MenuItem();
+      this.menuItem19 = new System.Windows.Forms.MenuItem();
+      this.menuItem20 = new System.Windows.Forms.MenuItem();
+      this.menuItem17 = new System.Windows.Forms.MenuItem();
+      this.menuItem31 = new System.Windows.Forms.MenuItem();
+      this.menuItem30 = new System.Windows.Forms.MenuItem();
+      this.menuItem22 = new System.Windows.Forms.MenuItem();
+      this.menuItem21 = new System.Windows.Forms.MenuItem();
       this.menuItem6 = new System.Windows.Forms.MenuItem();
       this.menuItem7 = new System.Windows.Forms.MenuItem();
       this.statusBar = new System.Windows.Forms.StatusBar();
@@ -127,7 +140,7 @@ namespace WatchDog
       this.label3.Location = new System.Drawing.Point(12, 288);
       this.label3.Name = "label3";
       this.label3.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
-      this.label3.Size = new System.Drawing.Size(403, 59);
+      this.label3.Size = new System.Drawing.Size(403, 38);
       this.label3.TabIndex = 9;
       this.label3.Text = "If MediaPortal crashes unexpectedly, or if you can not reproduce an issue nicely," +
     " then this option will simply export all the currently available log files.";
@@ -175,6 +188,7 @@ namespace WatchDog
       this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem1,
             this.menuItem3,
+            this.menuItem9,
             this.menuItem6});
       // 
       // menuItem1
@@ -197,8 +211,7 @@ namespace WatchDog
       this.menuItem3.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem4,
             this.menuItem8,
-            this.menuItem5,
-            this.menuItem9});
+            this.menuItem5});
       this.menuItem3.Text = "Action";
       // 
       // menuItem4
@@ -218,11 +231,22 @@ namespace WatchDog
       // 
       // menuItem9
       // 
-      this.menuItem9.Index = 3;
+      this.menuItem9.Index = 2;
       this.menuItem9.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem13,
+            this.menuItem32,
+            this.menuItem33,
+            this.menuItem15,
+            this.menuItem17});
+      this.menuItem9.Text = "Advanced Control";
+      // 
+      // menuItem13
+      // 
+      this.menuItem13.Index = 0;
+      this.menuItem13.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem10,
             this.menuItem14});
-      this.menuItem9.Text = "4. Advanced Control";
+      this.menuItem13.Text = "Single-Seat";
       // 
       // menuItem10
       // 
@@ -231,7 +255,7 @@ namespace WatchDog
             this.menuItem11,
             this.menuItem12,
             this.miCleanLogBoth});
-      this.menuItem10.Text = "Clean Log files";
+      this.menuItem10.Text = "Clean Log";
       // 
       // menuItem11
       // 
@@ -301,9 +325,81 @@ namespace WatchDog
       this.miStartTvService.Text = "Start Tv Service";
       this.miStartTvService.Click += new System.EventHandler(this.miStartTvService_Click);
       // 
+      // menuItem32
+      // 
+      this.menuItem32.Index = 1;
+      this.menuItem32.Text = "-";
+      // 
+      // menuItem33
+      // 
+      this.menuItem33.Enabled = false;
+      this.menuItem33.Index = 2;
+      this.menuItem33.Text = "Multi-seat";
+      // 
+      // menuItem15
+      // 
+      this.menuItem15.Index = 3;
+      this.menuItem15.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem16});
+      this.menuItem15.Text = "Client";
+      // 
+      // menuItem16
+      // 
+      this.menuItem16.Index = 0;
+      this.menuItem16.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem18,
+            this.menuItem19,
+            this.menuItem20});
+      this.menuItem16.Text = "Clean Log";
+      // 
+      // menuItem18
+      // 
+      this.menuItem18.Index = 0;
+      this.menuItem18.Text = "Log Files";
+      // 
+      // menuItem19
+      // 
+      this.menuItem19.Index = 1;
+      this.menuItem19.Text = "Events";
+      // 
+      // menuItem20
+      // 
+      this.menuItem20.Index = 2;
+      this.menuItem20.Text = "Both";
+      // 
+      // menuItem17
+      // 
+      this.menuItem17.Index = 4;
+      this.menuItem17.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem31,
+            this.menuItem30,
+            this.menuItem22,
+            this.menuItem21});
+      this.menuItem17.Text = "TV Server";
+      // 
+      // menuItem31
+      // 
+      this.menuItem31.Index = 0;
+      this.menuItem31.Text = "Start Tv Service";
+      // 
+      // menuItem30
+      // 
+      this.menuItem30.Index = 1;
+      this.menuItem30.Text = "Stop Tv Service";
+      // 
+      // menuItem22
+      // 
+      this.menuItem22.Index = 2;
+      this.menuItem22.Text = "-";
+      // 
+      // menuItem21
+      // 
+      this.menuItem21.Index = 3;
+      this.menuItem21.Text = "Clean Log";
+      // 
       // menuItem6
       // 
-      this.menuItem6.Index = 2;
+      this.menuItem6.Index = 3;
       this.menuItem6.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem7});
       this.menuItem6.Text = "Help";
@@ -438,5 +534,18 @@ namespace WatchDog
     private System.Windows.Forms.MenuItem miCleanMpClogAndEvent;
     private System.Windows.Forms.Button btnZipFileReset;
     private System.Windows.Forms.MenuItem miCleanTVsLog;
+    private System.Windows.Forms.MenuItem menuItem13;
+    private System.Windows.Forms.MenuItem menuItem15;
+    private System.Windows.Forms.MenuItem menuItem16;
+    private System.Windows.Forms.MenuItem menuItem18;
+    private System.Windows.Forms.MenuItem menuItem19;
+    private System.Windows.Forms.MenuItem menuItem20;
+    private System.Windows.Forms.MenuItem menuItem32;
+    private System.Windows.Forms.MenuItem menuItem17;
+    private System.Windows.Forms.MenuItem menuItem31;
+    private System.Windows.Forms.MenuItem menuItem30;
+    private System.Windows.Forms.MenuItem menuItem22;
+    private System.Windows.Forms.MenuItem menuItem21;
+    private System.Windows.Forms.MenuItem menuItem33;
   }
 }
