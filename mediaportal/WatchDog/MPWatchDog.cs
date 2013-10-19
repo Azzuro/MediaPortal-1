@@ -51,7 +51,7 @@ namespace WatchDog
     #region Variables
 
     private readonly string _tempDir = "";
-    private string _zipFile = "";
+    public static string zipFile = "";
     private string _tempConfig;
     private bool _autoMode;
     private bool _watchdog;
@@ -168,8 +168,8 @@ namespace WatchDog
 
     private string GetZipFilename()
     {
-      _zipFile = tbZipFile.Text;
-      return _zipFile
+      zipFile = tbZipFile.Text;
+      return zipFile
         .Replace("[date]", DateTime.Now.ToString("yy_MM_dd"))
         .Replace("[time]", DateTime.Now.ToString("HH_mm"));
     }
@@ -198,19 +198,19 @@ namespace WatchDog
       
       if (_watchdogtargetDir == string.Empty)
       {
-        _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) 
+        zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) 
           + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
       }
       else
       {
-        _zipFile = _watchdogtargetDir + "\\MediaPortalLogs_[date]__[time].zip";
+        zipFile = _watchdogtargetDir + "\\MediaPortalLogs_[date]__[time].zip";
       }
       
       if (!ParseCommandLine())
       {
         Application.Exit();
       }
-      tbZipFile.Text = _zipFile;
+      tbZipFile.Text = zipFile;
       if (_autoMode)
       {
         if (!CheckRequirements())
@@ -252,7 +252,7 @@ namespace WatchDog
         switch (args[i].ToLowerInvariant())
         {
           case "-zipfile":
-            _zipFile = args[++i];
+            zipFile = args[++i];
             break;
           case "-safe":
             _safeMode = true;
@@ -320,7 +320,7 @@ namespace WatchDog
       if (dr == DialogResult.OK)
       {
         tbZipFile.Text = saveDialog.FileName;
-        _zipFile = tbZipFile.Text;
+        zipFile = tbZipFile.Text;
       }
     }
 
@@ -587,7 +587,7 @@ namespace WatchDog
         SetStatus("Starting TVService...");
          // Start the service, and wait until its status is "Running".
         TVservice.Start();
-        int _countDown = 30;
+        int _countDown = 50;
         while (!TVservice.Status.Equals(ServiceControllerStatus.Running) && _countDown > 0)
           {
             _countDown--;
@@ -622,7 +622,7 @@ namespace WatchDog
       }
 
       // Refresh and display the current service status.
-      int _countDown = 30;
+      int _countDown = 50;
       while (!TVService.Status.Equals(ServiceControllerStatus.Stopped) && _countDown > 0)
       {
         _countDown--;
@@ -728,10 +728,9 @@ namespace WatchDog
 
     private void btnZipFileReset_Click(object sender, EventArgs e)
     {
-      _zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+      zipFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
          + "\\MediaPortal-Logs\\MediaPortalLogs_[date]__[time].zip";
-      tbZipFile.Text = _zipFile;
-      //MessageBox.Show(_zipFile, "MediaPortal WatchDog -- Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      tbZipFile.Text = zipFile;
     }
 
     private void miCleanLogBoth_Click(object sender, EventArgs e)
