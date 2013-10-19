@@ -32,7 +32,7 @@ namespace WatchDog
       this.label1 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.lDelay = new System.Windows.Forms.Label();
-      this.label3 = new System.Windows.Forms.Label();
+      this.Information = new System.Windows.Forms.Label();
       this.btnCancel = new System.Windows.Forms.Button();
       this.timer1 = new System.Windows.Forms.Timer(this.components);
       this.SuspendLayout();
@@ -66,12 +66,12 @@ namespace WatchDog
       this.lDelay.TabIndex = 2;
       this.lDelay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // label3
+      // Information
       // 
-      this.label3.Location = new System.Drawing.Point(14, 68);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(333, 63);
-      this.label3.TabIndex = 3;
+      this.Information.Location = new System.Drawing.Point(14, 68);
+      this.Information.Name = "Information";
+      this.Information.Size = new System.Drawing.Size(333, 63);
+      this.Information.TabIndex = 3;
       // 
       // btnCancel
       // 
@@ -95,7 +95,7 @@ namespace WatchDog
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(361, 219);
       this.Controls.Add(this.btnCancel);
-      this.Controls.Add(this.label3);
+      this.Controls.Add(this.Information);
       this.Controls.Add(this.lDelay);
       this.Controls.Add(this.label2);
       this.Controls.Add(this.label1);
@@ -116,7 +116,7 @@ namespace WatchDog
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.Label lDelay;
-    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label Information;
     private System.Windows.Forms.Button btnCancel;
     private System.Windows.Forms.Timer timer1;
   }

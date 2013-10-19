@@ -33,7 +33,7 @@ namespace WatchDog
       InitializeComponent();
       ticks = cancelDelay;
       lDelay.Text = ticks.ToString() + " second(s)";
-      label3.Text = "The logfiles will be automatically collected and saved to\n" + MPWatchDog.zipFile;
+      Information.Text = "The logfiles will be automatically collected and saved to\n" + MPWatchDog.zipFile;
     }
 
     private void timer1_Tick(object sender, EventArgs e)
