@@ -648,6 +648,7 @@ namespace TvDatabase
           atscChannel.PmtPid = detail.PmtPid;
           atscChannel.Provider = detail.Provider;
           atscChannel.ServiceId = detail.ServiceId;
+          atscChannel.LogicalChannelNumber = detail.ChannelNumber;
           //atscChannel.SymbolRate = detail.Symbolrate;
           atscChannel.TransportId = detail.TransportId;
           atscChannel.ModulationType = (ModulationType)detail.Modulation;
@@ -1767,10 +1768,19 @@ namespace TvDatabase
       SqlSelectCommand.Append("select p.* from Program p inner join Channel c on c.idChannel = p.idChannel ");
       SqlSelectCommand.AppendFormat("where endTime > '{0}' ", DateTime.Now.ToString(GetDateTimeString(), mmddFormat));
 
-      if (searchCriteria.Length > 0)
+      string provider = ProviderFactory.GetDefaultProvider().Name.ToLowerInvariant();
+      if (provider == "mysql" && searchCriteria == "[0-9]")
+      {
+        if (searchCriteria.Length > 0)
+        {
+          SqlSelectCommand.AppendFormat("and title REGEXP '^{0}' ", EscapeSQLString(searchCriteria));
+        }
+      }
+      else if (searchCriteria.Length > 0)
       {
         SqlSelectCommand.AppendFormat("and title like '{0}%' ", EscapeSQLString(searchCriteria));
       }
+
       switch (channelType)
       {
         case ChannelType.Radio:
@@ -3349,6 +3359,15 @@ namespace TvDatabase
                                                 typeof (Channel));
       IList<ChannelMap> maps = ObjectFactory.GetCollection<ChannelMap>(statement.Execute());
       return maps != null && maps.Count > 0;
+    }
+
+    /// <summary>
+    /// Set the log level
+    /// </summary>
+    public void SetLogLevel()
+    {
+      var logLevel = (LogLevel)int.Parse(GetSetting("loglevel", "5").Value); // default is debug
+      Log.SetLogLevel(logLevel);
     }
   }
 }

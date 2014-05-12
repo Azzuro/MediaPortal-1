@@ -25,7 +25,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Windows.Media.Animation;
 using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
@@ -292,7 +291,10 @@ namespace TvPlugin
     {
       using (Settings xmlwriter = new MPSettings())
       {
-        xmlwriter.SetValue("mytv", "channel", _currentChannel.DisplayName);
+        if (_currentChannel != null)
+        {
+          xmlwriter.SetValue("mytv", "channel", _currentChannel.DisplayName);
+        }
         xmlwriter.SetValue("tvguide", "timeperblock", _timePerBlock);
       }
     }
@@ -330,14 +332,11 @@ namespace TvPlugin
         case Action.ActionType.ACTION_PREVIOUS_MENU:
           if (_singleChannelView)
           {
-            OnSwitchMode();
-            return; // base.OnAction would close the EPG as well
-          }
-          else
-          {
-            GUIWindowManager.ShowPreviousWindow();
+            GUIWindowManager.ActivateWindow((int)Window.WINDOW_TVGUIDE);
             return;
           }
+          GUIWindowManager.ShowPreviousWindow();
+          return;
 
         case Action.ActionType.ACTION_KEY_PRESSED:
           if (action.m_key != null)
@@ -727,7 +726,10 @@ namespace TvPlugin
             {
               base.OnMessage(message);
               SaveSettings();
-              _recordingList.Clear();
+              if (_recordingList != null && TVHome.Connected)
+              {
+                _recordingList.Clear();
+              }
 
               _controls = new Dictionary<int, GUIButton3PartControl>();
               _channelList = null;
@@ -739,7 +741,31 @@ namespace TvPlugin
 
           case GUIMessage.MessageType.GUI_MSG_WINDOW_INIT:
             {
+
+              if (!TVHome.Connected)
+              {
+                RemoteControl.Clear();
+                GUIWindowManager.ActivateWindow((int)Window.WINDOW_SETTINGS_TVENGINE);
+                return false;
+              }
+
               TVHome.WaitForGentleConnection();
+
+              if (TVHome.Navigator == null)
+              {
+                TVHome.OnLoaded();
+              }
+              else if (TVHome.Navigator.Channel == null)
+              {
+                TVHome.m_navigator.ReLoad();
+                TVHome.LoadSettings(false);
+              }
+
+              // Create the channel navigator (it will load groups and channels)
+              if (TVHome.m_navigator == null)
+              {
+                TVHome.m_navigator = new ChannelNavigator();
+              }
 
               GUIPropertyManager.SetProperty("#itemcount", string.Empty);
               GUIPropertyManager.SetProperty("#selecteditem", string.Empty);

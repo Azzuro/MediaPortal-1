@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -364,6 +365,34 @@ namespace MediaPortal.GUI.Library
       GUIGraphicsContext.ScalePosToScreenResolution(ref _imageWidth, ref _imageHeight);
     }
 
+    private void item_OnThumbnailRefresh(int buttonNr, bool gotFocus)
+    {
+      lock (GUIGraphicsContext.RenderLock)
+      {
+        // Update current focused thumbnail
+        GUIListItem item = _listItems[buttonNr + _offset];
+        {
+          if (gotFocus)
+          {
+            if (item.HasThumbnail)
+            {
+              string selectedThumbProperty = GUIPropertyManager.GetProperty("#selectedthumb");
+              if (selectedThumbProperty != item.ThumbnailImage)
+              {
+                GUIPropertyManager.SetProperty("#selectedthumb", string.Empty);
+                GUIPropertyManager.SetProperty("#selectedthumb", item.ThumbnailImage);
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_FOCUS_CHANGED, WindowId, GetID, ParentID, 0, 0, null)
+                {
+                  SendToTargetWindow = true
+                };
+                GUIGraphicsContext.SendMessage(msg);
+              }
+            }
+          }
+        }
+      }
+    }
+
     protected void OnSelectionChanged()
     {
       if (!IsVisible)
@@ -393,7 +422,14 @@ namespace MediaPortal.GUI.Library
       {
         GUIPropertyManager.SetProperty("#selecteditem", strSelected);
         GUIPropertyManager.SetProperty("#selecteditem2", strSelected2);
-        GUIPropertyManager.SetProperty("#selectedthumb", strThumb);
+        if (!string.IsNullOrEmpty(strThumb) && string.IsNullOrEmpty(Path.GetPathRoot(strThumb)))
+        {
+          GUIPropertyManager.SetProperty("#selectedthumb", strThumb);
+        }
+        else if (MediaPortal.Util.Utils.FileExistsInCache(strThumb))
+        {
+          GUIPropertyManager.SetProperty("#selectedthumb", strThumb);
+        }
         GUIPropertyManager.SetProperty("#selectedindex", strIndex);
         GUIPropertyManager.SetProperty("#highlightedbutton", strSelected);
       }
@@ -830,17 +866,19 @@ namespace MediaPortal.GUI.Library
         // override text color if item is on a remote folder
         if (item.IsRemote)
         {
-          color = _remoteColor;
-          if (item.IsDownloading)
-          {
-            color = _downloadColor;
-          }
+          color = item.IsDownloading ? _downloadColor : _remoteColor; 
         }
 
         // override text color if item is a BD or DVD folder
         if (item.IsBdDvdFolder)
         {
           color = _bdDvdDirectoryColor;
+        }
+
+        // apply unfocusedAlpha to color if item is not selected and plugin didn't set it as selected
+        if (!gotFocus && !item.Selected)
+        {
+          color = Color.FromArgb(_unfocusedAlpha, Color.FromArgb((int)color)).ToArgb();
         }
 
         // if control is not in focus apply color dimming
@@ -867,18 +905,8 @@ namespace MediaPortal.GUI.Library
             // set position for rendering
             label2.SetPosition(positionX - GUIGraphicsContext.ScaleHorizontal(6), positionY + GUIGraphicsContext.ScaleVertical(2) + _textOffsetY2);
 
-            // apply unfocusedAlpha if label is not selected
-            if (!gotFocus)
-            {
-              // apply unfocusedAlpha if control is in focus, else use color in its current state for rendering 
-              label2.TextColor = Focus ? Color.FromArgb(_unfocusedAlpha, Color.FromArgb((int) color)).ToArgb() : color;
-
-              // apply unfocused alpha if plugin sets label as not selected and unfocused alpha should be applied to all labels
-              if (!item.Selected && _unfocusedAlphaApplyToAll)
-              {
-                label2.TextColor = Color.FromArgb(_unfocusedAlpha, Color.FromArgb((int)color)).ToArgb();
-              }
-            }
+            // set label text color
+            label2.TextColor = color;
 
             // set text, alignment and font for rendering
             label2.Label = item.Label2;
@@ -945,6 +973,12 @@ namespace MediaPortal.GUI.Library
           color = _bdDvdDirectoryColor;
         }
 
+        // apply unfocusedAlpha to color if item is not selected and plugin didn't set it as selected
+        if (!gotFocus && !item.Selected)
+        {
+          color = Color.FromArgb(_unfocusedAlpha, Color.FromArgb((int)color)).ToArgb();
+        }
+
         // if control is not in focus apply color dimming
         if (!Focus)
         {
@@ -967,18 +1001,8 @@ namespace MediaPortal.GUI.Library
             // set position for rendering
             label3.SetPosition(positionX, ypos);
 
-            // apply unfocusedAlpha if label is not selected
-            if (!gotFocus)
-            {
-              // apply unfocusedAlpha if control is in focus, else use color in its current state for rendering
-              label3.TextColor = Focus ? Color.FromArgb(_unfocusedAlpha, Color.FromArgb((int) color)).ToArgb() : color;
-
-              // apply unfocused alpha if plugin sets label as not selected and unfocused alpha should be applied to all labels
-              if (!item.Selected && _unfocusedAlphaApplyToAll)
-              {
-                label3.TextColor = Color.FromArgb(_unfocusedAlpha, Color.FromArgb((int)color)).ToArgb();
-              }
-            }
+            // set label text color
+            label3.TextColor = color;
 
             // set label text for rendering
             label3.Label = item.Label3;
@@ -1025,7 +1049,7 @@ namespace MediaPortal.GUI.Library
           else
           {
             int index = _listItems.IndexOf(item);
-            if (_listItems[0].Label != "..")
+            if (_listItems.Count > 0 && _listItems[0].Label != "..")
             {
               index++;
             }
@@ -1054,7 +1078,14 @@ namespace MediaPortal.GUI.Library
           break;
 
         case "#duration":
-          label = MediaPortal.Util.Utils.SecondsToHMSString(item.Duration);
+          if (item.Duration == 0)
+          {
+            label = string.Empty;
+          }
+          else
+          {
+            label = MediaPortal.Util.Utils.SecondsToHMSString(item.Duration);
+          }
           break;
 
         case "#shortduration":
@@ -1158,6 +1189,8 @@ namespace MediaPortal.GUI.Library
           RenderLabel(timePassed, i, labelX, dwPosY, gotFocus);
 
           RenderPinIcon(timePassed, i, pinX, dwPosY, gotFocus);
+
+          item_OnThumbnailRefresh(i, gotFocus);
 
           dwPosY += _itemHeight + _spaceBetweenItems;
         }
@@ -1697,7 +1730,6 @@ namespace MediaPortal.GUI.Library
         if ((WindowId != (int)GUIWindow.Window.WINDOW_DIALOG_MENU) ||
             (action.wID == Action.ActionType.ACTION_SELECT_ITEM))
         {
-          _searchString = "";
           GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_CLICKED, WindowId, GetID, ParentID,
                                           (int)action.wID, 0, null);
           GUIGraphicsContext.SendMessage(msg);
@@ -1989,7 +2021,7 @@ namespace MediaPortal.GUI.Library
 
       if (bItemFound)
       {
-        SelectItem(iItem);
+          SelectItem(iItem);
       }
 
       _lastSearchItem = _cursorX + _offset;
@@ -2422,7 +2454,7 @@ namespace MediaPortal.GUI.Library
         }
         if (!_upDownControl.Focus)
         {
-          if (_rightControlId != GetID)
+          if (NavigateRight != GetID)
           {
             base.OnAction(action);
           }
@@ -2503,9 +2535,9 @@ namespace MediaPortal.GUI.Library
           if ((AnimationTimer.TickCount - _lastCommandTime) > _loopDelay)
           {
             //check if _downControlId is set -> then go to the window
-            if (_upControlId > 0)
+            if (NavigateUp> 0)
             {
-              GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SETFOCUS, WindowId, GetID, _upControlId,
+              GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SETFOCUS, WindowId, GetID, NavigateUp,
                                               (int)action.wID, 0, null);
               GUIGraphicsContext.SendMessage(msg);
             }
@@ -2571,9 +2603,9 @@ namespace MediaPortal.GUI.Library
             if ((AnimationTimer.TickCount - _lastCommandTime) > _loopDelay)
             {
               //check if _downControlId is set -> then go to the window
-              if (_downControlId > 0)
+              if (NavigateDown > 0)
               {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SETFOCUS, WindowId, GetID, _downControlId,
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SETFOCUS, WindowId, GetID, NavigateDown,
                                                 (int)action.wID, 0, null);
                 GUIGraphicsContext.SendMessage(msg);
               }
@@ -2609,9 +2641,9 @@ namespace MediaPortal.GUI.Library
             if ((AnimationTimer.TickCount - _lastCommandTime) > _loopDelay)
             {
               //check if _downControlId is set -> then go to the window
-              if (_downControlId > 0)
+              if (NavigateDown > 0)
               {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SETFOCUS, WindowId, GetID, _downControlId,
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SETFOCUS, WindowId, GetID, NavigateDown,
                                                 (int)action.wID, 0, null);
                 GUIGraphicsContext.SendMessage(msg);
               }
@@ -2899,12 +2931,20 @@ namespace MediaPortal.GUI.Library
       if (iItem >= 0 && iItem < _listItems.Count)
       {
         GUIListItem pItem = _listItems[iItem];
+        if (string.IsNullOrEmpty(pItem.ThumbnailImage))
+        {
+          MediaPortal.Util.Utils.SetDefaultIcons(pItem);
+          strThumb = pItem.IconImageBig;
+        }
+        else
+        {
+          strThumb = pItem.ThumbnailImage;
+        }
         strLabel = pItem.Label;
         strLabel2 = pItem.Label2;
-        strThumb = pItem.ThumbnailImage;
         int index = iItem;
 
-        if (_listItems[0].Label != "..")
+        if (_listItems.Count > 0 && _listItems[0].Label != "..")
         {
           index++;
         }

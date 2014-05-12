@@ -62,13 +62,28 @@ namespace TvService
     {
       if (Environment.OSVersion.Version.Major >= 6)
       {
-        // Enable pre-shutdown notification by accessing the ServiceBase class's internals through .NET reflection (code by Siva Chandran P)
-        FieldInfo acceptedCommandsFieldInfo = typeof(ServiceBase).GetField("acceptedCommands", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (acceptedCommandsFieldInfo != null)
+        try
         {
-          int value = (int)acceptedCommandsFieldInfo.GetValue(this);
-          acceptedCommandsFieldInfo.SetValue(this, value | SERVICE_ACCEPT_PRESHUTDOWN);
-        } 
+          // Call base Creator
+          MethodInfo init = typeof(ServiceBase).GetMethod("Initialize", BindingFlags.Instance | BindingFlags.NonPublic);
+          init.Invoke(this, new object[] { false });
+
+          // Register the "TvServiceCallbackEx" handler
+          Type targetDelegate = typeof(ServiceBase).Assembly.GetType("System.ServiceProcess.NativeMethods+ServiceControlCallbackEx");
+          FieldInfo commandCallbackEx = typeof(ServiceBase).GetField("commandCallbackEx", BindingFlags.Instance | BindingFlags.NonPublic);
+          commandCallbackEx.SetValue(this, Delegate.CreateDelegate(targetDelegate, this, "TvServiceCallbackEx"));
+
+          // Accept SERVICE_CONTROL_PRESHUTDOWN
+          var acceptedCommands = typeof(ServiceBase).GetField("acceptedCommands", BindingFlags.Instance | BindingFlags.NonPublic);
+          int accCom = (int)acceptedCommands.GetValue(this);
+          acceptedCommands.SetValue(this, accCom | SERVICE_ACCEPT_PRESHUTDOWN);
+
+        }
+        catch (Exception ex)
+        {
+          Log.Error("Exception on Starting TV Service: {0}", ex);
+          throw;
+        }
       }
 
       AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
@@ -219,6 +234,9 @@ namespace TvService
           }
         }
 
+        var layer = new TvBusinessLayer();
+        layer.SetLogLevel();
+
         _tvServiceThread.Start();
 
         while (!TvServiceThread.Started)
@@ -320,18 +338,26 @@ namespace TvService
     }
 
     /// <summary>
-    /// When implemented in a derived class, executes when the Service Control Manager (SCM) passes a custom command to the service. Specifies actions to take when a command with the specified parameter value occurs.
+    /// Handle service events
     /// </summary>
-    /// <param name="command"></param>
-    protected override void OnCustomCommand(int command)
+    /// <param name="control"></param>
+    /// <param name="eventType"></param>
+    /// <param name="eventData"></param>
+    /// <param name="eventContext"></param>
+    /// <returns></returns>
+    internal virtual int TvServiceCallbackEx(int control, int eventType, IntPtr eventData, IntPtr eventContext)
     {
-      // Check for pre-shutdown notification (code by Siva Chandran P)
-      if (command == SERVICE_CONTROL_PRESHUTDOWN)
+      var baseCallback = typeof(ServiceBase).GetMethod("ServiceCommandCallbackEx", BindingFlags.Instance | BindingFlags.NonPublic);
+      switch (control)
       {
-        OnStop();
+        case SERVICE_CONTROL_PRESHUTDOWN:
+          Log.Debug("TV Service got PRESHUTDOWN event");
+          // Pretend shutdown was called
+          return (int)baseCallback.Invoke(this, new object[] { 0x00000005, eventType, eventData, eventContext });
+        default:
+          // Call base
+          return (int)baseCallback.Invoke(this, new object[] { control, eventType, eventData, eventContext });
       }
-      else
-        base.OnCustomCommand(command);
     }
   }
 
@@ -496,7 +522,7 @@ namespace TvService
     {
       if (msg == WM_POWERBROADCAST)
       {
-        Log.Debug("TV service PowerEventThread received WM_POWERBROADCAST {1}", wParam.ToInt32());
+        Log.Debug("TV service PowerEventThread received WM_POWERBROADCAST {0}", wParam.ToInt32());
         switch (wParam.ToInt32())
         {
           case PBT_APMQUERYSUSPENDFAILED:
@@ -758,6 +784,19 @@ namespace TvService
         if (plugin.MasterOnly == false || _controller.IsMaster)
         {
           Setting setting = layer.GetSetting(String.Format("plugin{0}", plugin.Name), "false");
+          
+          // Start PowerScheduler if PS++ is enabled and remove PS++ entry
+          if (plugin.Name == "PowerScheduler")
+          {
+            Setting settingPSpp = layer.GetSetting(String.Format("pluginPowerScheduler++"), "false");
+            if (settingPSpp.Value == "true")
+            {
+              setting.Value = "true";
+              setting.Persist();
+            }
+            settingPSpp.Remove();
+          }
+
           if (setting.Value == "true")
           {
             Log.Info("TV Service: Plugin: {0} started", plugin.Name);
@@ -868,7 +907,7 @@ namespace TvService
       {
         if (!Started)
         {
-          Log.Info("TV service: Starting");
+          Log.Info("TV Service: Starting");
 
           Thread.CurrentThread.Name = "TVService";
 
@@ -900,7 +939,7 @@ namespace TvService
             _InitializedEvent.Set();
           }
           _started = true;
-          Log.Info("TV service: Started");
+          Log.Info("TV Service: Started");
 
           // Wait for termination
           while (true)
@@ -911,14 +950,14 @@ namespace TvService
       }
       catch (ThreadAbortException)
       {
-        Log.Info("TvService is beeing stopped");
+        Log.Info("TV Service is being stopped");
       }
       catch (Exception ex)
       {
         if (_started)
-          Log.Error("TvService terminated unexpectedly: {0}", ex.ToString());
+          Log.Error("TV Service terminated unexpectedly: {0}", ex.ToString());
         else
-          Log.Error("TvService failed not start: {0}", ex.ToString());
+          Log.Error("TV Service failed to start: {0}", ex.ToString());
       }
       finally
       {

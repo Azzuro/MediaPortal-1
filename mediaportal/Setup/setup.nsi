@@ -48,6 +48,8 @@
 !define git_InstallScripts "${git_ROOT}\Tools\InstallationScripts"
 # common script init
 !include "${git_InstallScripts}\include\MediaPortalScriptInit.nsh"
+# NET4.0 Checking
+!include "${git_InstallScripts}\include\DotNetSearch.nsh"
 
 # additional path definitions
 !ifdef GIT_BUILD
@@ -422,6 +424,7 @@ Section "MediaPortal core files (required)" SecCore
   
   SetOutPath "$MPdir.Config\scripts"
   File /nonfatal "${MEDIAPORTAL.BASE}\scripts\InternalActorMoviesGrabber.csscript"
+	File /nonfatal "${MEDIAPORTAL.BASE}\scripts\InternalMovieImagesGrabber.csscript"
   File /nonfatal "${MEDIAPORTAL.BASE}\scripts\VDBParserStrings.xml"
   
   SetOutPath "$MPdir.Base"
@@ -443,6 +446,9 @@ Section "MediaPortal core files (required)" SecCore
   File "${git_DirectShowFilters}\mpc-hc_subs\bin\${BUILD_TYPE}\mpcSubs.dll"
   File "${git_DirectShowFilters}\DXErr9\bin\${BUILD_TYPE}\Dxerr9.dll"
   File "${git_MP}\MiniDisplayLibrary\bin\${BUILD_TYPE}\MiniDisplayLibrary.dll"
+  ; iMON VFD/LCD
+  File "${git_ROOT}\Packages\MediaPortal-iMON-Display.1.1.0\lib\iMONDisplay.dll"
+  File "${git_ROOT}\Packages\MediaPortal-iMON-Display.1.1.0\lib\iMONDisplayWrapper.dll"
   ; Utils
   File "${git_MP}\Utils\bin\${BUILD_TYPE}\Utils.dll"
   ; Common Utils
@@ -451,6 +457,7 @@ Section "MediaPortal core files (required)" SecCore
   File "${git_MP}\MediaPortal.Support\bin\${BUILD_TYPE}\MediaPortal.Support.dll"
   ; Databases
   File "${git_MP}\databases\bin\${BUILD_TYPE}\Databases.dll"
+  File "${git_MP}\databases\bin\${BUILD_TYPE}\HtmlAgilityPack.dll"
   ; MusicShareWatcher
   File "${git_MP}\ProcessPlugins\MusicShareWatcher\MusicShareWatcher\bin\${BUILD_TYPE}\MusicShareWatcher.exe"
   File "${git_MP}\ProcessPlugins\MusicShareWatcher\MusicShareWatcherHelper\bin\${BUILD_TYPE}\MusicShareWatcherHelper.dll"
@@ -474,7 +481,55 @@ Section "MediaPortal core files (required)" SecCore
   File "${git_MP}\SubtitlePlugins\bin\${BUILD_TYPE}\SubtitlePlugins.dll"
   SetOutPath "$MPdir.Plugins\Windows"
   File "${git_MP}\Dialogs\bin\${BUILD_TYPE}\Dialogs.dll"
-  File "${git_MP}\WindowPlugins\bin\${BUILD_TYPE}\WindowPlugins.dll"
+  ; Window Plugins
+  File "${git_MP}\WindowPlugins\GUIDisc\bin\${BUILD_TYPE}\GUIDisc.dll"
+  File "${git_MP}\WindowPlugins\GUIDVD\bin\${BUILD_TYPE}\GUIDVD.dll"
+  File "${git_MP}\WindowPlugins\GUIHome\bin\${BUILD_TYPE}\GUIHome.dll"
+  File "${git_MP}\WindowPlugins\GUILastFMRadio\bin\${BUILD_TYPE}\GUILastFMRadio.dll"
+  File "${git_MP}\WindowPlugins\GUIMusic\bin\${BUILD_TYPE}\GUIMusic.dll"
+  File "${git_MP}\WindowPlugins\GUISudoku\bin\${BUILD_TYPE}\GUISudoku.dll"
+  File "${git_MP}\WindowPlugins\GUIPictures\bin\${BUILD_TYPE}\GUIPictures.dll"
+  File "${git_MP}\WindowPlugins\GUIRSSFeed\bin\${BUILD_TYPE}\GUIRSSFeed.dll"
+  File "${git_MP}\WindowPlugins\GUISettings\bin\${BUILD_TYPE}\GUISettings.dll"
+  File "${git_MP}\WindowPlugins\GUITetris\bin\${BUILD_TYPE}\GUITetris.dll"
+  File "${git_MP}\WindowPlugins\GUITopbar\bin\${BUILD_TYPE}\GUITopbar.dll"
+  File "${git_MP}\WindowPlugins\GUIVideos\bin\${BUILD_TYPE}\GUIVideos.dll"
+  File "${git_MP}\WindowPlugins\GUIWikipedia\bin\${BUILD_TYPE}\GUIWikipedia.dll"
+  ; Common Plugins
+  File "${git_MP}\WindowPlugins\Common.GUIPlugins\bin\${BUILD_TYPE}\Common.GUIPlugins.dll"
+  ; ffmpeg
+  SetOutPath "$MPdir.Base\MovieThumbnailer"
+  File "${git_ROOT}\Packages\ffmpeg.2.1.1\ffmpeg.exe"
+  ; NuGet binaries
+  ; Bass Core
+  SetOutPath "$MPdir.Base\"
+  File "${git_ROOT}\Packages\BASS.2.4.10\bass.dll"
+  File "${git_ROOT}\Packages\BASS.NET.2.4.10.3\lib\net40\Bass.Net.dll"
+  ; Bass Addons
+  SetOutPath "$MPdir.Base\"
+  File "${git_ROOT}\Packages\bass.asio.1.3.0.2\bassasio.dll"
+  File "${git_ROOT}\Packages\bass.fx.2.4.10.1\bass_fx.dll"
+  File "${git_ROOT}\Packages\bass.mix.2.4.7.2\bassmix.dll"
+  File "${git_ROOT}\Packages\bass.vst.2.4.5\bass_vst.dll"
+  File "${git_ROOT}\Packages\bass.wadsp.2.4.1\bass_wadsp.dll"
+  File "${git_ROOT}\Packages\bass.wasapi.2.4.0.2\basswasapi.dll"
+  File "${git_ROOT}\Packages\bass.ofr.2.4.0.2\OptimFROG.dll"
+  ; Bass AudioDecoders
+  SetOutPath "$MPdir.Base\MusicPlayer\plugins\audio decoders"
+  File "${git_ROOT}\Packages\bass.aac.2.4.4.4\bass_aac.dll"
+  File "${git_ROOT}\Packages\bass.ac3.2.4.0.3\bass_ac3.dll"
+  File "${git_ROOT}\Packages\bass.alac.2.4.3\bass_alac.dll"
+  File "${git_ROOT}\Packages\bass.ape.2.4.1\bass_ape.dll"
+  File "${git_ROOT}\Packages\bass.mpc.2.4.1.1\bass_mpc.dll"
+  File "${git_ROOT}\Packages\bass.ofr.2.4.0.2\bass_ofr.dll"
+  File "${git_ROOT}\Packages\bass.spx.2.4.2\bass_spx.dll"
+  File "${git_ROOT}\Packages\bass.tta.2.4.0\bass_tta.dll"
+  File "${git_ROOT}\Packages\bass.cd.2.4.5\basscd.dll"
+  File "${git_ROOT}\Packages\bass.flac.2.4.1\bassflac.dll"
+  File "${git_ROOT}\Packages\bass.midi.2.4.8\bassmidi.dll"
+  File "${git_ROOT}\Packages\bass.opus.2.4.1.3\bassopus.dll"
+  File "${git_ROOT}\Packages\bass.wma.2.4.4\basswma.dll"
+  File "${git_ROOT}\Packages\bass.wv.2.4.4\basswv.dll"
   ; Doc
   SetOutPath "$MPdir.Base\Docs"
   File "${git_MP}\Docs\BASS License.txt"
@@ -484,6 +539,7 @@ Section "MediaPortal core files (required)" SecCore
   File /oname=bluray.dll "${git_DirectShowFilters}\bin_Win32\libbluray\libbluray.dll"
   ; TvLibrary for Genre
   File "${git_TVServer}\TvLibrary.Interfaces\bin\${BUILD_TYPE}\TvLibrary.Interfaces.dll"
+  File "${git_MP}\LastFMLibrary\bin\${BUILD_TYPE}\LastFMLibrary.dll"
   ; MediaPortal.exe
   
   #---------------------------------------------------------------------------
@@ -566,7 +622,8 @@ SectionEnd
   ; Config Files
   Delete "$MPdir.Config\CaptureCardDefinitions.xml"
   Delete "$MPdir.Config\eHome Infrared Transceiver List XP.xml"
-  Delete "$MPdir.Config\keymap.xml"
+  ; Don't delete this file (needed for manual user input)
+  ;Delete "$MPdir.Config\keymap.xml"
   Delete "$MPdir.Config\wikipedia.xml"
 
   Delete "$MPdir.Config\Installer\cleanup.xml"
@@ -575,6 +632,7 @@ SectionEnd
   Delete "$MPdir.Config\scripts\MovieInfo\IMDB_MP13x.csscript"
   RMDir "$MPdir.Config\scripts\MovieInfo"
   Delete "$MPdir.Config\scripts\InternalActorMoviesGrabber.csscript"
+	Delete "$MPdir.Config\scripts\InternalMovieImagesGrabber.csscript"
   Delete "$MPdir.Config\scripts\VDBParserStrings.xml"
   RMDir "$MPdir.Config\scripts"
 
@@ -596,6 +654,9 @@ SectionEnd
   Delete "$MPdir.Base\Dxerr9.dll"
   Delete "$MPdir.Base\mpcSubs.dll"
   Delete "$MPdir.Base\MiniDisplayLibrary.dll"
+  ; iMON VFD/LCD
+  Delete "$MPdir.Base\iMONDisplay.dll"
+  Delete "$MPdir.Base\iMONDisplayWrapper.dll"
   ; Utils
   Delete "$MPdir.Base\Utils.dll"
   ; Common Utils
@@ -604,6 +665,7 @@ SectionEnd
   Delete "$MPdir.Base\MediaPortal.Support.dll"
   ; Databases
   Delete "$MPdir.Base\Databases.dll"
+  Delete "$MPdir.Base\\HtmlAgilityPack.dll"
   ; MusicShareWatcher
   Delete "$MPdir.Base\MusicShareWatcher.exe"
   Delete "$MPdir.Base\MusicShareWatcherHelper.dll"
@@ -628,7 +690,19 @@ SectionEnd
   Delete "$MPdir.Plugins\subtitle\SubtitlePlugins.dll"
   RMDir "$MPdir.Plugins\subtitle"
   Delete "$MPdir.Plugins\Windows\Dialogs.dll"
-  Delete "$MPdir.Plugins\Windows\WindowPlugins.dll"
+  Delete "$MPdir.Plugins\Windows\GUIDisc.dll"
+  Delete "$MPdir.Plugins\Windows\GUIDVD.dll"
+  Delete "$MPdir.Plugins\Windows\GUIHome.dll"
+  Delete "$MPdir.Plugins\Windows\GUIMusic.dll"
+  Delete "$MPdir.Plugins\Windows\GUISudoku.dll"
+  Delete "$MPdir.Plugins\Windows\GUIPictures.dll"
+  Delete "$MPdir.Plugins\Windows\GUIRSSFeed.dll"
+  Delete "$MPdir.Plugins\Windows\GUISettings.dll"
+  Delete "$MPdir.Plugins\Windows\GUITetris.dll"
+  Delete "$MPdir.Plugins\Windows\GUITopbar.dll"
+  Delete "$MPdir.Plugins\Windows\GUIVideos.dll"
+  Delete "$MPdir.Plugins\Windows\GUIWikipedia.dll"
+  Delete "$MPdir.Plugins\Windows\Common.GUIPlugins.dll"
   RMDir "$MPdir.Plugins\Windows"
   RMDir "$MPdir.Plugins"
   ; Doc
@@ -744,6 +818,10 @@ Section -Post
   ${LOG_TEXT} "INFO" "Removing obsolete BASS 2.3 files"
   Delete "$MPdir.Base\MusicPlayer\plugins\audio decoders\bass_wv.dll"
 
+  ; MP1-4315 Blow windowplugins dll to separate plugin dlls
+  ${LOG_TEXT} "INFO" "Removing obsolete WindowPlugins.dll"
+  Delete "$MPdir.Plugins\Windows\WindowPlugins.dll"
+  
   ; removing old shortcut
   ${LOG_TEXT} "INFO" "Removing obsolete startmenu shortcuts"
   Delete "${STARTMENU_GROUP}\MediaPortal Logs Collector.lnk"
@@ -905,6 +983,9 @@ FunctionEnd
 Function .onInit
   ${LOG_OPEN}
   ${LOG_TEXT} "DEBUG" "FUNCTION .onInit"
+
+  !insertmacro MediaPortalNetFrameworkCheck
+  !insertmacro MediaPortalNet4FrameworkCheck
 
   StrCpy $MPTray_Running 0
 

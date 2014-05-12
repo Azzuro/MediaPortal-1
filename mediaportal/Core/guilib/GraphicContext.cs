@@ -83,6 +83,7 @@ namespace MediaPortal.GUI.Library
     public static event VideoGammaContrastBrightnessHandler OnGammaContrastBrightnessChanged; // triggered when contrast, brightness, gamma settings have been changed
 
     public static Device DX9Device = null; // pointer to current DX9 device
+
     // ReSharper disable InconsistentNaming
     public static Graphics graphics = null; // GDI+ Graphics object
     public static Form form = null; // Current GDI form
@@ -130,8 +131,11 @@ namespace MediaPortal.GUI.Library
     private static bool _vmr9Allowed = true;
     private static DateTime _lastActivity = DateTime.Now;
     private static Screen _currentScreen;
+    private static Screen _currentStartScreen;
+    private static int _currentMonitorIdx = -1;
     private static readonly bool IsDX9EXused = OSInfo.OSInfo.VistaOrLater();
     private static bool _allowRememberLastFocusedItem = true;
+    private static bool _fullHD3DFormat = false;
 
     // Stacks for matrix transformations.
     private static readonly Stack<Matrix> ProjectionMatrixStack = new Stack<Matrix>();
@@ -176,7 +180,11 @@ namespace MediaPortal.GUI.Library
     // singleton. Don't allow any instance of this class
     private GUIGraphicsContext() {}
 
-    static GUIGraphicsContext() {}
+    static GUIGraphicsContext()
+    {
+      Render3DMode = eRender3DMode.None;
+      Switch3DSides = false;
+    }
 
     /// <summary>
     /// Set/get last User Activity
@@ -258,6 +266,36 @@ namespace MediaPortal.GUI.Library
       }
     }
 
+    public static object RenderModeSwitch = new Object();
+
+    public enum eRender3DMode { None, SideBySide, TopAndBottom, SideBySideTo2D, TopAndBottomTo2D };
+
+    static eRender3DMode _render3DMode;
+
+    public static eRender3DMode Render3DMode
+    {
+      get { return _render3DMode; }
+      set
+      {
+        lock (RenderModeSwitch)
+        {
+          _render3DMode = value;
+        }
+      }
+    }
+
+    public enum eRender3DModeHalf { None, SBSLeft, SBSRight, TABTop, TABBottom };
+
+    public static eRender3DModeHalf Render3DModeHalf { get; set; }
+
+    public static bool Switch3DSides { get; set; }
+
+    public static bool Render3DSubtitle { get; set; }
+
+    public static int Render3DSubtitleDistance { get; set; }
+
+    public enum eFullHD3DFormat { None, SBS, TAB };
+
     /// <summary>
     /// Property to enable/disable animations
     /// </summary>
@@ -280,6 +318,34 @@ namespace MediaPortal.GUI.Library
         return _currentScreen ?? Screen.PrimaryScreen;
       }
       set { _currentScreen = value; }
+    }
+
+    /// <summary>
+    /// Property to get and set current start screen on witch MP is displayed
+    /// </summary>
+    // ReSharper disable InconsistentNaming
+    public static Screen currentStartScreen
+    // ReSharper restore InconsistentNaming
+    {
+      get
+      {
+        return _currentStartScreen ?? Screen.PrimaryScreen;
+      }
+      set { _currentStartScreen = value; }
+    }
+
+    /// <summary>
+    /// Property to get and set current monitor index for refreshrate setting
+    /// </summary>
+    // ReSharper disable InconsistentNaming
+    public static int currentMonitorIdx
+    // ReSharper restore InconsistentNaming
+    {
+      get
+      {
+        return _currentMonitorIdx;
+      }
+      set { _currentMonitorIdx = value; }
     }
 
     /// <summary>
@@ -680,6 +746,12 @@ namespace MediaPortal.GUI.Library
           OnVideoWindowChanged();
         }
       }
+    }
+
+    public static bool IsFullHD3DFormat
+    {
+      get { return _fullHD3DFormat; }
+      set { _fullHD3DFormat = value; }
     }
 
     /// <summary>
