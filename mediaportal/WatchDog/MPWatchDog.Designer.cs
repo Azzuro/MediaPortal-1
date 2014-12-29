@@ -54,6 +54,7 @@ namespace WatchDog
       this.menuRebootTvServer = new System.Windows.Forms.MenuItem();
       this.menuShutdownTvServer = new System.Windows.Forms.MenuItem();
       this.menuPowerOffTvServer = new System.Windows.Forms.MenuItem();
+      this.menuItemWOLTvServer = new System.Windows.Forms.MenuItem();
       this.menuItem9 = new System.Windows.Forms.MenuItem();
       this.menuItemClearEventLogs = new System.Windows.Forms.MenuItem();
       this.menuItemClearMPlogs = new System.Windows.Forms.MenuItem();
@@ -68,8 +69,8 @@ namespace WatchDog
       this.label2 = new System.Windows.Forms.Label();
       this.label3 = new System.Windows.Forms.Label();
       this.CollectBox = new System.Windows.Forms.GroupBox();
-      this.cbMediaPortalClient_logs = new System.Windows.Forms.CheckBox();
       this.cbTVServer_logs = new System.Windows.Forms.CheckBox();
+      this.cbMediaPortalClient_logs = new System.Windows.Forms.CheckBox();
       this.settingsGroup.SuspendLayout();
       this.CollectBox.SuspendLayout();
       this.SuspendLayout();
@@ -257,7 +258,8 @@ namespace WatchDog
       this.menuItem10.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuRebootTvServer,
             this.menuShutdownTvServer,
-            this.menuPowerOffTvServer});
+            this.menuPowerOffTvServer,
+            this.menuItemWOLTvServer});
       this.menuItem10.Text = "Power Management";
       // 
       // menuRebootTvServer
@@ -277,6 +279,12 @@ namespace WatchDog
       this.menuPowerOffTvServer.Index = 2;
       this.menuPowerOffTvServer.Text = "Power Off TvServer";
       this.menuPowerOffTvServer.Click += new System.EventHandler(this.menuPowerOffTvServer_Click);
+      // 
+      // menuItemWOLTvServer
+      // 
+      this.menuItemWOLTvServer.Index = 3;
+      this.menuItemWOLTvServer.Text = "Wake On TvServer";
+      this.menuItemWOLTvServer.Click += new System.EventHandler(this.menuItemWOLTvServer_Click);
       // 
       // menuItem9
       // 
@@ -394,18 +402,6 @@ namespace WatchDog
       this.CollectBox.TabStop = false;
       this.CollectBox.Text = "Collecting logs from :";
       // 
-      // cbMediaPortalClient_logs
-      // 
-      this.cbMediaPortalClient_logs.AutoSize = true;
-      this.cbMediaPortalClient_logs.Checked = true;
-      this.cbMediaPortalClient_logs.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.cbMediaPortalClient_logs.Location = new System.Drawing.Point(8, 20);
-      this.cbMediaPortalClient_logs.Name = "cbMediaPortalClient_logs";
-      this.cbMediaPortalClient_logs.Size = new System.Drawing.Size(249, 19);
-      this.cbMediaPortalClient_logs.TabIndex = 0;
-      this.cbMediaPortalClient_logs.Text = "MediaPortal Client (+ TVE for singleseat )";
-      this.cbMediaPortalClient_logs.UseVisualStyleBackColor = true;
-      // 
       // cbTVServer_logs
       // 
       this.cbTVServer_logs.AutoSize = true;
@@ -417,6 +413,18 @@ namespace WatchDog
       this.cbTVServer_logs.TabIndex = 1;
       this.cbTVServer_logs.Text = "TVE Server (Only for multiseat)";
       this.cbTVServer_logs.UseVisualStyleBackColor = true;
+      // 
+      // cbMediaPortalClient_logs
+      // 
+      this.cbMediaPortalClient_logs.AutoSize = true;
+      this.cbMediaPortalClient_logs.Checked = true;
+      this.cbMediaPortalClient_logs.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.cbMediaPortalClient_logs.Location = new System.Drawing.Point(8, 20);
+      this.cbMediaPortalClient_logs.Name = "cbMediaPortalClient_logs";
+      this.cbMediaPortalClient_logs.Size = new System.Drawing.Size(249, 19);
+      this.cbMediaPortalClient_logs.TabIndex = 0;
+      this.cbMediaPortalClient_logs.Text = "MediaPortal Client (+ TVE for singleseat )";
+      this.cbMediaPortalClient_logs.UseVisualStyleBackColor = true;
       // 
       // MPWatchDog
       // 
@@ -490,5 +498,6 @@ namespace WatchDog
     private System.Windows.Forms.GroupBox CollectBox;
     private System.Windows.Forms.CheckBox cbTVServer_logs;
     private System.Windows.Forms.CheckBox cbMediaPortalClient_logs;
+    private System.Windows.Forms.MenuItem menuItemWOLTvServer;
   }
 }
