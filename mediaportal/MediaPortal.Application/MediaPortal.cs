@@ -3919,11 +3919,6 @@ public class MediaPortalApp : D3D, IRender
       return;
     }
 
-    if (Thread.CurrentThread.Name != "MPMain" && Thread.CurrentThread.Name != "Config Main")
-    {
-      return;
-    }
-
 #if !DEBUG
     try
     {
