@@ -93,13 +93,6 @@ MPMadPresenter::~MPMadPresenter()
     Log("MPMadPresenter::Destructor() - m_pMad release 1");
     if (m_pMad)
     {
-      // Let's madVR restore original display mode (when adjust refresh it's handled by madVR)
-      if (Com::SmartQIPtr<IMadVRCommand> pMadVrCmd = m_pMad)
-      {
-        pMadVrCmd->SendCommand("restoreDisplayModeNow");
-        pMadVrCmd.Release();
-        Log("MPMadPresenter::Destructor() - restoreDisplayModeNow");
-      }
       m_pMad.FullRelease();
     }
     Log("MPMadPresenter::Destructor() - m_pMad release 2");
@@ -306,6 +299,15 @@ HRESULT MPMadPresenter::Shutdown()
       Log("MPMadPresenter::Shutdown() m_pCallback release");
     }
 
+    // Restore windowed overlay settings
+    if (Com::SmartQIPtr<IMadVRSettings> m_pSettings = m_pMad)
+    {
+      if (m_enableOverlay)
+      {
+        m_pSettings->SettingsSetBoolean(L"enableOverlay", true);
+      }
+    }
+
     Log("MPMadPresenter::Shutdown() stop");
     return S_OK;
   } // Scope for autolock
@@ -411,6 +413,38 @@ HRESULT MPMadPresenter::Stopping()
   { // Scope for autolock for the local variable (lock, which when deleted releases the lock)
     CAutoLock lock(this);
 
+    if (Com::SmartQIPtr<IMadVRSettings> m_pSettings = m_pMad)
+    {
+      // Read enableOverlay settings
+      m_pSettings->SettingsGetBoolean(L"enableOverlay", &m_enableOverlay);
+
+      if (m_enableOverlay)
+      {
+        m_pSettings->SettingsSetBoolean(L"enableOverlay", false);
+      }
+    }
+
+    // Disable exclusive mode
+    if (m_ExclusiveMode)
+    {
+      MPMadPresenter::EnableExclusive(false);
+      Log("MPMadPresenter::Stopping() disable exclusive mode");
+    }
+
+    // Detroy create madVR window and need to be here to avoid some crash
+    DeInitMadvrWindow();
+
+    if (m_pMad)
+    {
+      // Let's madVR restore original display mode (when adjust refresh it's handled by madVR)
+      if (Com::SmartQIPtr<IMadVRCommand> pMadVrCmd = m_pMad)
+      {
+        pMadVrCmd->SendCommand("restoreDisplayModeNow");
+        pMadVrCmd.Release();
+        Log("MPMadPresenter::Stopping() restoreDisplayModeNow");
+      }
+    }
+
     if (m_pSRCB)
     {
       // nasty, but we have to let it know about our death somehow
@@ -459,13 +493,6 @@ HRESULT MPMadPresenter::Stopping()
       }
       m_pMediaControl = nullptr;
       Log("MPMadPresenter::Stopping() m_pMediaControl stop 2");
-    }
-
-    // Disable exclusive mode
-    if (m_ExclusiveMode)
-    {
-      MPMadPresenter::EnableExclusive(false);
-      Log("MPMadPresenter::Stopping() disable exclusive mode");
     }
 
     Log("MPMadPresenter::Stopping() stopped");
@@ -918,6 +945,21 @@ HRESULT MPMadPresenter::SetDevice(IDirect3DDevice9* pD3DDev)
 
 HRESULT MPMadPresenter::Render(REFERENCE_TIME frameStart, int left, int top, int right, int bottom, int width, int height)
 {
+  return RenderEx(frameStart, 0, 0, left, top, right, bottom, width, height);
+}
+
+HRESULT MPMadPresenter::RenderEx(REFERENCE_TIME frameStart, REFERENCE_TIME frameStop, REFERENCE_TIME avgTimePerFrame, int left, int top, int right, int bottom, int width, int height)
+{
+  return RenderEx2(frameStart, frameStop, avgTimePerFrame, { left, top, right, bottom }, { left, top, right, bottom }, { 0, 0, width, height });
+}
+
+HRESULT MPMadPresenter::RenderEx2(REFERENCE_TIME frameStart, REFERENCE_TIME frameStop, REFERENCE_TIME avgTimePerFrame, RECT croppedVideoRect, RECT originalVideoRect, RECT viewportRect, const double videoStretchFactor /*= 1.0*/)
+{
+  return RenderEx3(std::move(frameStart), std::move(frameStop), std::move(avgTimePerFrame), std::move(croppedVideoRect), std::move(originalVideoRect), std::move(viewportRect), std::move(videoStretchFactor));
+}
+
+HRESULT MPMadPresenter::RenderEx3(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFERENCE_TIME atpf, RECT croppedVideoRect, RECT originalVideoRect, RECT viewportRect, const double videoStretchFactor /*= 1.0*/, int xOffsetInPixels /*= 0*/, DWORD flags /*= 0*/)
+{
   if (m_pCallback)
   {
     if (m_pShutdown)
@@ -973,7 +1015,10 @@ HRESULT MPMadPresenter::Render(REFERENCE_TIME frameStart, int left, int top, int
     m_deviceState.Store();
     SetupMadDeviceState();
 
-    m_pCallback->RenderSubtitle(frameStart, left, top, right, bottom, width, height);
+    m_pCallback->RenderSubtitle(rtStart, croppedVideoRect.left, croppedVideoRect.top, croppedVideoRect.right, croppedVideoRect.bottom, viewportRect.right, viewportRect.bottom, xOffsetInPixels);
+
+    // Commented out but usefull for testing
+    //Log("%s : madVR xOffsetInPixels : %i", __FUNCTION__, xOffsetInPixels);
 
     m_deviceState.Restore();
   }
