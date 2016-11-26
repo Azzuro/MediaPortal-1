@@ -2648,8 +2648,26 @@ namespace MediaPortal.Player
           //Log.Debug("1- getVisible : {0}", getVisible);
           //Log.Debug("1- PlaneScene.DisableLowLatencyMode : {0}", PlaneScene.DisableLowLatencyMode);
           //Log.Debug("1- PlaneScene.Visible : {0}", PlaneScene.Visible);
-          _player.Pause();
-          _player.Pause();
+          //_player.Pause();
+          //_player.Pause();
+          //_player.SetVideoWindow();
+          // TODO find a better way to restore madVR rendering (right now i send an 'X' to force refresh a current window)
+          var key = new Key(120, 0);
+          var action = new Action(key, Action.ActionType.ACTION_KEY_PRESSED, 0, 0);
+          if (ActionTranslator.GetAction(GUIWindowManager.ActiveWindowEx, key, ref action))
+          {
+            GUIGraphicsContext.OnAction(action);
+            action = new Action(key, Action.ActionType.ACTION_KEY_PRESSED, 0, 0);
+            GUIGraphicsContext.OnAction(action);
+          }
+          key = new Key(120, 0);
+          action = new Action(key, Action.ActionType.ACTION_KEY_PRESSED, 0, 0);
+          if (ActionTranslator.GetAction(GUIWindowManager.ActiveWindowEx, key, ref action))
+          {
+            GUIGraphicsContext.OnAction(action);
+            action = new Action(key, Action.ActionType.ACTION_KEY_PRESSED, 0, 0);
+            GUIGraphicsContext.OnAction(action);
+          }
           //VMR9Util.g_vmr9.DisableLowLatencyMode = getDisableLowLatencyMode;
           //VMR9Util.g_vmr9.Visible = getVisible;
           //Log.Debug("2- getDisableLowLatencyMode : {0}", getDisableLowLatencyMode);
@@ -3136,6 +3154,15 @@ namespace MediaPortal.Player
         return;
       }
       _player.SetVideoWindow();
+    }
+
+    public static void SetVideoWindowMadVr()
+    {
+      if (_player == null)
+      {
+        return;
+      }
+      _player.SetVideoWindowMadVR();
     }
 
     public static void Init()
