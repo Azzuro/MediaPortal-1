@@ -566,7 +566,7 @@ namespace MediaPortal.Player
         }
 
         HResult hr;
-        IntPtr hMonitor = Manager.GetAdapterMonitor(Win32.FindMonitorIndexForScreen()); //GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal);
+        IntPtr hMonitor = Manager.GetAdapterMonitor(GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal);
         IntPtr upDevice = DirectShowUtil.GetUnmanagedDevice(GUIGraphicsContext.DX9Device);
 
         _scene = new PlaneScene(this);
@@ -896,12 +896,12 @@ namespace MediaPortal.Player
       currentVmr9State = Vmr9PlayState.Repaint;
       if (_scene != null) _scene.DrawVideo = false;
 
-      if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR &&
-          GUIGraphicsContext.InVmr9Render)
-      {
-        MadVrRepeatFrameSend();
-        Log.Debug("VMR9: MadVrRepeatFrameSend()");
-      }
+      //if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR &&
+      //    GUIGraphicsContext.InVmr9Render)
+      //{
+      //  MadVrRepeatFrameSend();
+      //  Log.Debug("VMR9: MadVrRepeatFrameSend()");
+      //}
     }
 
     public bool IsRepainting

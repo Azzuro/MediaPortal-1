@@ -425,15 +425,20 @@ namespace MediaPortal.Player
     protected void SelectSubtitles()
     {
       if (SubtitleStreams == 0) return;
-      if (!SubEngine.GetInstance().AutoShow) return;
+      if (!SubEngine.GetInstance().AutoShow && (SubEngine.GetSubtitleInstance() != "XySubFilter" && SubEngine.GetSubtitleInstance() != "DirectVobSub"))
+      {
+        return;
+      }
       CultureInfo ci = null;
       bool autoloadSubtitle = false;
+      bool selectionOff = false;
 
       using (Settings xmlreader = new MPSettings())
       {
         try
         {
           autoloadSubtitle = xmlreader.GetValueAsBool("subtitles", "autoloadSubtitle", false);
+          selectionOff = xmlreader.GetValueAsBool("subtitles", "selectionoff", true);
           ci = new CultureInfo(xmlreader.GetValueAsString("subtitles", "language", defaultLanguageCulture));
           Log.Info("VideoPlayerVMR7: Subtitle CultureInfo {0}", ci);
         }
@@ -446,23 +451,59 @@ namespace MediaPortal.Player
 
       if (!streamLAVSelection)
       {
-        int subsCount = SubtitleStreams; // Not in the loop otherwise it will be reaccessed at each pass
-        for (int i = 0; i < subsCount; i++)
+        if (!SubEngine.GetInstance().AutoShow && (SubEngine.GetSubtitleInstance() == "XySubFilter" || SubEngine.GetSubtitleInstance() == "DirectVobSub") && !selectionOff)
         {
-          string subtitleLanguage = SubtitleLanguage(i);
-          //Add localized stream names for FFDshow when OS language = Skin language
-          string localizedCINameSub = Util.Utils.TranslateLanguageString(ci.EnglishName);
-          if (localizedCINameSub.Equals(SubtitleLanguage(i), StringComparison.OrdinalIgnoreCase) ||
-              ci.EnglishName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
-              ci.TwoLetterISOLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
-              ci.ThreeLetterISOLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
-              ci.ThreeLetterWindowsLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
-              subtitleLanguage.ToUpperInvariant().Contains(ci.ThreeLetterWindowsLanguageName))
+          int subsCount = SubtitleStreams; // Not in the loop otherwise it will be reaccessed at each pass
+          for (var i = 0; i < subsCount; i++)
           {
-            CurrentSubtitleStream = i;
-            Log.Info("VideoPlayerVMR7: CultureInfo Selected active subtitle track language: {0} ({1})", ci.EnglishName, i);
-            EnableSubtitle = true;
-            break;
+            string subtitleLanguage = SubtitleLanguage(i);
+            string subtitleName = SubtitleName(i);
+            //Add localized stream names for FFDshow when OS language = Skin language
+            string localizedCINameSub = Util.Utils.TranslateLanguageString(ci.EnglishName);
+            if (localizedCINameSub.Equals(SubtitleLanguage(i), StringComparison.OrdinalIgnoreCase) ||
+                ci.EnglishName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                ci.TwoLetterISOLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                ci.ThreeLetterISOLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                ci.ThreeLetterWindowsLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                subtitleLanguage.ToUpperInvariant().Contains(ci.ThreeLetterWindowsLanguageName))
+            {
+              if (subtitleName.ToLowerInvariant().Contains("forced"))
+              {
+                CurrentSubtitleStream = i;
+                Log.Info("VideoPlayerVMR7: CultureInfo Selected active subtitle track language: {0} ({1})",
+                  ci.EnglishName,
+                  i);
+                EnableSubtitle = true;
+                break;
+              }
+            }
+          }
+        }
+        else if (!SubEngine.GetInstance().AutoShow)
+        {
+          return;
+        }
+        else
+        {
+          int subsCount = SubtitleStreams; // Not in the loop otherwise it will be reaccessed at each pass
+          for (int i = 0; i < subsCount; i++)
+          {
+            string subtitleLanguage = SubtitleLanguage(i);
+            //Add localized stream names for FFDshow when OS language = Skin language
+            string localizedCINameSub = Util.Utils.TranslateLanguageString(ci.EnglishName);
+            if (localizedCINameSub.Equals(SubtitleLanguage(i), StringComparison.OrdinalIgnoreCase) ||
+                ci.EnglishName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                ci.TwoLetterISOLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                ci.ThreeLetterISOLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                ci.ThreeLetterWindowsLanguageName.Equals(subtitleLanguage, StringComparison.OrdinalIgnoreCase) ||
+                subtitleLanguage.ToUpperInvariant().Contains(ci.ThreeLetterWindowsLanguageName))
+            {
+              CurrentSubtitleStream = i;
+              Log.Info("VideoPlayerVMR7: CultureInfo Selected active subtitle track language: {0} ({1})", ci.EnglishName,
+                i);
+              EnableSubtitle = true;
+              break;
+            }
           }
         }
       }
@@ -627,32 +668,6 @@ namespace MediaPortal.Player
         SetVideoPosition(rDest);
         _sourceRectangle = rSource;
         _videoRectangle = rDest;
-
-        if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR && !m_bFullScreen)
-        {
-          if (basicVideo != null)
-          {
-            // TODO why it is needed for some video to be able to reduce fullscreen video window
-            {
-              basicVideo.SetDestinationPosition(m_iPositionX, m_iPositionY, m_iWidth, m_iHeight);
-              GUIGraphicsContext.rDest = rDest;
-              Log.Debug("VideoPlayer: resize madVR video window m_iPositionX : {0}, m_iPositionY : {1}, m_iWidth : {2}, m_iHeight : {3}", m_iPositionX, m_iPositionY, m_iWidth, m_iHeight);
-            }
-          }
-        }
-      }
-    }
-
-    public override void SetVideoWindowMadVR()
-    {
-      if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR && !m_bFullScreen)
-      {
-        if (basicVideo != null)
-        {
-          basicVideo.SetDestinationPosition(GUIGraphicsContext.rDest.Left, GUIGraphicsContext.rDest.Top, GUIGraphicsContext.rDest.Width, GUIGraphicsContext.rDest.Height);
-          Log.Debug("VideoPlayer: resize madVR video window rDest.Left : {0}, rDest.Top : {1}, rDest.Width : {2}, rDest.Height : {3}",
-            GUIGraphicsContext.rDest.Left, GUIGraphicsContext.rDest.Top, GUIGraphicsContext.rDest.Width, GUIGraphicsContext.rDest.Height);
-        }
       }
     }
 
@@ -707,7 +722,7 @@ namespace MediaPortal.Player
           }
 
           Log.Debug("VideoPlayer: SetSourcePosition 1");
-          basicVideo.SetSourcePosition(rSource.Left, rSource.Top, rSource.Width, rSource.Height);
+          //basicVideo.SetSourcePosition(rSource.Left, rSource.Top, rSource.Width, rSource.Height);
           Log.Debug("VideoPlayer: SetSourcePosition 2");
 
           if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR)
@@ -753,7 +768,8 @@ namespace MediaPortal.Player
           mediaPos.get_Duration(out m_dDuration); //(refresh timeline when change EDITION)
           mediaPos.get_CurrentPosition(out m_dCurrentPos);
         }
-        if (GUIGraphicsContext.BlankScreen || (GUIGraphicsContext.VideoWindow.Width <= 10 && GUIGraphicsContext.Overlay == false && GUIGraphicsContext.IsFullScreenVideo == false))
+        if (GUIGraphicsContext.BlankScreen || (GUIGraphicsContext.VideoWindow.Width <= 10 && GUIGraphicsContext.IsFullScreenVideo == false &&
+          GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.madVR))
         {
           if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR)
           {

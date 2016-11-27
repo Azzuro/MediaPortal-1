@@ -768,32 +768,6 @@ namespace MediaPortal.Player
         SetVideoPosition(rDest);
         _sourceRectangle = rSource;
         _videoRectangle = rDest;
-
-        if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR && !_isFullscreen)
-        {
-          if (_basicVideo != null)
-          {
-            // TODO why it is needed for some video to be able to reduce fullscreen video window
-            {
-              _basicVideo.SetDestinationPosition(_positionX, _positionY, _width, _height);
-              GUIGraphicsContext.rDest = rDest;
-              Log.Debug("TSReaderPlayer: resize madVR video window _positionX : {0}, _positionY : {1}, _width : {2}, _height : {3}", _positionX, _positionY, _width, _height);
-            }
-          }
-        }
-      }
-    }
-
-    public override void SetVideoWindowMadVR()
-    {
-      if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR && !_isFullscreen)
-      {
-        if (_basicVideo != null)
-        {
-          _basicVideo.SetDestinationPosition(GUIGraphicsContext.rDest.Left, GUIGraphicsContext.rDest.Top, GUIGraphicsContext.rDest.Width, GUIGraphicsContext.rDest.Height);
-          Log.Debug("TSReaderPlayer: resize madVR video window rDest.Left : {0}, rDest.Top : {1}, rDest.Width : {2}, rDest.Height : {3}",
-            GUIGraphicsContext.rDest.Left, GUIGraphicsContext.rDest.Top, GUIGraphicsContext.rDest.Width, GUIGraphicsContext.rDest.Height);
-        }
       }
     }
 
@@ -833,7 +807,8 @@ namespace MediaPortal.Player
       }
 
       _lastPosition = CurrentPosition;
-      if (GUIGraphicsContext.VideoWindow.Width <= 10 && GUIGraphicsContext.IsFullScreenVideo == false)
+      if (GUIGraphicsContext.VideoWindow.Width <= 10 && GUIGraphicsContext.IsFullScreenVideo == false &&
+          GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.madVR)
       {
         _isVisible = false;
       }

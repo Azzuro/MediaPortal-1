@@ -561,12 +561,6 @@ namespace MediaPortal.Player
             _destinationRect.X, _destinationRect.Y, _destinationRect.X + _destinationRect.Width,
             _destinationRect.Y + _destinationRect.Height);
 
-          if (GUIGraphicsContext.VideoRenderer == GUIGraphicsContext.VideoRendererType.madVR &&
-              GUIGraphicsContext.Vmr9Active)
-          {
-            g_Player.SetVideoWindowMadVr();
-          }
-
           return true;
         }
         catch (Exception ex)
@@ -753,6 +747,11 @@ namespace MediaPortal.Player
             return -1; // (0) -> S_OK, (1) -> S_FALSE; //dont present video during window transitions
           }
 
+          if (VMR9Util.g_vmr9 != null)
+          {
+            VMR9Util.g_vmr9.StartMadVrPaused();
+          }
+
           _reEntrant = true;
           GUIGraphicsContext.InVmr9Render = true;
 
@@ -769,16 +768,8 @@ namespace MediaPortal.Player
 
             //Log.Debug("PlaneScene width {0}, height {1}", width, height);
 
-            if (GUIGraphicsContext.IsWindowVisible)
-            {
-              Size nativeSize = new Size(width, height);
-              _shouldRenderTexture = SetVideoWindow(nativeSize);
-            }
-            else
-            {
-              Size nativeSize = new Size(1, 1);
-              _shouldRenderTexture = SetVideoWindow(nativeSize);
-            }
+            Size nativeSize = new Size(width, height);
+            _shouldRenderTexture = SetVideoWindow(nativeSize);
           }
 
           Device device = GUIGraphicsContext.DX9Device;
