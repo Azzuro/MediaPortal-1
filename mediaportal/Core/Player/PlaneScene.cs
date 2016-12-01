@@ -440,7 +440,7 @@ namespace MediaPortal.Player
           if (nw <= 10 || nh <= 10 || x < 0 || y < 0)
           {
             // Need to resize window video for madVR
-            if (GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.madVR)
+            if (GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.madVR) //TODO
               return false;
           }
 
@@ -560,6 +560,11 @@ namespace MediaPortal.Player
           Log.Debug("PlaneScene: dst        : ({0},{1})-({2},{3})",
             _destinationRect.X, _destinationRect.Y, _destinationRect.X + _destinationRect.Width,
             _destinationRect.Y + _destinationRect.Height);
+
+          if (GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.madVR)
+          {
+            Util.Utils.SwitchFocus();
+          }
 
           return true;
         }
