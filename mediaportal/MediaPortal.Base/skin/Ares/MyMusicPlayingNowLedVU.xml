@@ -77,17 +77,6 @@
         <texture>Inf_gfx.png</texture>
       </control>	
 	
-	<control>
-      <description>Item Count</description>
-      <type>label</type>
-      <id>0</id>
-	  <posX>1865</posX>
-	  <posY>110</posY>
-      <label>#time</label>
-      <align>right</align>
-      <font>fontBold2</font>
-      <textcolor>eaeaea</textcolor>
-    </control>
 	
 	<!--List background-->
     
@@ -137,7 +126,7 @@
       <posY>250</posY>
       <width>525</width>
       <height>525</height>
-      <texture>..\..\..\thumbs\CDArt\Music\#Play.Current.Artist - #Play.Current.Album.png</texture>
+      <texture>..\..\..\thumbs\Music\CDArt\Fullsize\#Play.Current.Artist - #Play.Current.Album.png</texture>
 	  <animation effect="rotate" delay="0" end="-360" centre="475,258" time="30000" loop="true" condition="player.hasAudio">Conditional</animation>
 	  <colordiffuse>ffffffff</colordiffuse>
     </control>		

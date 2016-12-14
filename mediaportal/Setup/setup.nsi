@@ -1031,6 +1031,9 @@ Section -Post
     ${LOG_TEXT} "INFO" "Starting MPTray..."
     Exec '"$MPdir.Base\MPTray.exe"'
   ${EndIf}
+
+  ; run AresBackupRestore.exe
+  Exec '"$MPdir.Base\AresBackupRestore.exe"'
 SectionEnd
 
 #---------------------------------------------------------------------------
