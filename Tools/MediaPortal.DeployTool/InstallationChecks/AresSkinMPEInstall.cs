@@ -32,15 +32,15 @@ namespace MediaPortal.DeployTool.InstallationChecks
         public AresSkinMPEInstall()
     {
       MpeId = "24cd3916-41a8-4622-8c2a-c0b543b57f03"; // ID set by azzuro installer
-      MpeURL = "https://www.dropbox.com/s/xw7m9abwq9qmnid/Ares.mpe1?dl=0"; // based on dropbox URL
-      MpeUpdateURL= "https://www.dropbox.com/s/t92ws4qjuu8tq2k/Aresupdate.xml?dl=0"; // based on dropbox URL
+      MpeURL = "https://www.dropbox.com/s/xw7m9abwq9qmnid/Ares.mpe1?dl=1"; // based on dropbox URL
+      MpeUpdateURL= "https://www.dropbox.com/s/t92ws4qjuu8tq2k/Aresupdate.xml?dl=1"; // based on dropbox URL
       MpeUpdateFile = Application.StartupPath + "\\deploy\\" + "Aresupdate.xml";
       FileName = Application.StartupPath + "\\deploy\\" + "Ares.mpe1";
     }
 
     public override string GetDisplayName()
     {
-      return "Ares Skin" + (OnlineVersion != null ? " " + OnlineVersion.ToString() : "");
+      return "Ares" + (OnlineVersion != null ? " " + OnlineVersion.ToString() : "");
     }
 
     public override CheckResult CheckStatus()
@@ -54,9 +54,10 @@ namespace MediaPortal.DeployTool.InstallationChecks
         OnlineVersion = GetLatestAvailableMpeVersion();
         if (OnlineVersion != null)
         {
-          if (vMpeInstalled >= OnlineVersion)
+          if (vMpeInstalled >= OnlineVersion && File.Exists(FileName))
           {
-            result.state = CheckState.INSTALLED;
+                        
+                       result.state = CheckState.NOT_INSTALLED; // always install skin setup 
           }
           else
           {
@@ -75,7 +76,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
 
       if (InstallationProperties.Instance["InstallType"] == "download_only")
       {
-        result.state = result.needsDownload == true ? CheckState.DOWNLOADED : CheckState.NOT_DOWNLOADED;
+        result.state = result.needsDownload == false ? CheckState.DOWNLOADED : CheckState.NOT_DOWNLOADED;
       }
 
       return result;
