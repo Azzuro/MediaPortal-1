@@ -54,7 +54,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
         OnlineVersion = GetLatestAvailableMpeVersion();
         if (OnlineVersion != null)
         {
-          if (vMpeInstalled >= OnlineVersion && File.Exists(FileName))
+          if ((vMpeInstalled >= OnlineVersion || vMpeInstalled <= OnlineVersion) && File.Exists(FileName))
           {
                         
                        result.state = CheckState.NOT_INSTALLED; // always install skin setup 
