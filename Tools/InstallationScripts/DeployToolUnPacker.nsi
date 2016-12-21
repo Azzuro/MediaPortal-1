@@ -67,6 +67,7 @@
 ; comment one of the following lines to disable the preBuild
 !define BUILD_MediaPortal
 !define BUILD_TVServer
+!define BUILD_Skin
 !define BUILD_DeployTool
 !define BUILD_Installer
 
@@ -81,6 +82,20 @@
 !include "${git_InstallScripts}\include\MediaPortalMacros.nsh"
 !include "${git_InstallScripts}\include\DotNetSearch.nsh"
 
+#---------------------------------------------------------------------------
+# SKIN BUILD EXTENSION PACKAGE
+#---------------------------------------------------------------------------
+!define SkinRoot = "${git_ROOT}\skin"
+
+!ifdef BUILD_Skin
+Section Skin 
+
+#Ares Installer
+!define AresPath "${SkinRoot}\Ares"
+!include "${AresPath}\Ares_setup.nsh"
+
+SectionEnd
+!endif
 
 #---------------------------------------------------------------------------
 # INSTALLER ATTRIBUTES
@@ -138,10 +153,17 @@ Section
   File "${git_TVServer}\Setup\Release\package-tvengine.exe"
 #end of workaound code
 !endif
- 
+
   SetOutPath $INSTDIR\HelpContent\DeployToolGuide
   File /r /x .git "${git_DeployTool}\HelpContent\DeployToolGuide\*"
 
+SectionEnd
+
+;sections for unpacking skin installer
+Section
+SetOutPath $INSTDIR\deploy
+  File "${AresPath}\Ares.mpe1"
+  
 SectionEnd
 
 Function CheckAndDownloadDotNet45
