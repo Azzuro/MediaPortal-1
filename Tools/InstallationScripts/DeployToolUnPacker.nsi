@@ -85,10 +85,10 @@
 #---------------------------------------------------------------------------
 # SKIN BUILD EXTENSION PACKAGE
 #---------------------------------------------------------------------------
-!define SkinRoot = "${git_ROOT}\skin"
+!define SkinRoot "${git_ROOT}\skin"
 
 !ifdef BUILD_Skin
-Section Skin 
+Section
 
 #Ares Installer
 !define AresPath "${SkinRoot}\Ares"
