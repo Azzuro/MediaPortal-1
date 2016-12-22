@@ -26,53 +26,67 @@ using Microsoft.Win32;
 
 namespace MediaPortal.DeployTool.InstallationChecks
 {
-    
-    internal class AresSkinMPEInstall : MPEInstall
+
+  internal class AresSkinMPEInstall : MPEInstall
   {
-        public AresSkinMPEInstall()
+
+    public AresSkinMPEInstall()
     {
       MpeId = "24cd3916-41a8-4622-8c2a-c0b543b57f03"; // ID set by azzuro installer
       MpeURL = "https://www.dropbox.com/s/xw7m9abwq9qmnid/Ares.mpe1?dl=1"; // based on dropbox URL
-      MpeUpdateURL= "https://www.dropbox.com/s/t92ws4qjuu8tq2k/Aresupdate.xml?dl=1"; // based on dropbox URL
+      MpeUpdateURL = "https://www.dropbox.com/s/t92ws4qjuu8tq2k/Aresupdate.xml?dl=1"; // based on dropbox URL
       MpeUpdateFile = Application.StartupPath + "\\deploy\\" + "Aresupdate.xml";
       FileName = Application.StartupPath + "\\deploy\\" + "Ares.mpe1";
     }
 
     public override string GetDisplayName()
     {
-      return "Ares" + (OnlineVersion != null ? " " + OnlineVersion.ToString() : "");
+      return "Ares Skin" + (OnlineVersion != null ? " " + OnlineVersion.ToString() : "");
     }
 
     public override CheckResult CheckStatus()
     {
       CheckResult result = default(CheckResult);
 
-      // check if mpe package is installed
-      Version vMpeInstalled = GetInstalledMpeVersion();
-      if (vMpeInstalled != null)
+      // check if the user selected Ares as default skin, and install it
+
+      if (InstallationProperties.Instance["ChosenSkin"] == "Ares")
       {
-        OnlineVersion = GetLatestAvailableMpeVersion();
-        if (OnlineVersion != null)
+
+        // check if mpe package is installed
+        Version vMpeInstalled = GetInstalledMpeVersion();
+        if (vMpeInstalled != null)
         {
-          if ((vMpeInstalled >= OnlineVersion || vMpeInstalled <= OnlineVersion) && File.Exists(FileName))
+          OnlineVersion = GetLatestAvailableMpeVersion();
+          if (OnlineVersion != null)
           {
-                        
-                       result.state = CheckState.NOT_INSTALLED; // always install skin setup 
+            if ((vMpeInstalled >= OnlineVersion || vMpeInstalled <= OnlineVersion) && File.Exists(FileName))
+            {
+
+              result.state = CheckState.NOT_INSTALLED; // always install skin setup 
+            }
+            else
+            {
+              result.needsDownload = !File.Exists(FileName);
+            }
           }
           else
           {
-            result.needsDownload = !File.Exists(FileName);
+            result.state = CheckState.VERSION_LOOKUP_FAILED;
           }
         }
         else
         {
-          result.state = CheckState.VERSION_LOOKUP_FAILED;
+          result.needsDownload = !File.Exists(FileName);
         }
       }
       else
+
       {
-        result.needsDownload = !File.Exists(FileName);
+        result.state = CheckState.SKIPPED;
+        return result;
       }
+
 
       if (InstallationProperties.Instance["InstallType"] == "download_only")
       {
