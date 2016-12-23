@@ -32,8 +32,6 @@ using System.Runtime.InteropServices;
 using MediaPortal.DeployTool.Sections;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
-using MediaPortal.Configuration;
-using MediaPortal.Profile;
 
 namespace MediaPortal.DeployTool
 {
@@ -831,8 +829,6 @@ namespace MediaPortal.DeployTool
 
       deployXml.Save(deployXmlLocation);
     }
-
-
 
     #endregion
   }

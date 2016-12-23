@@ -95,8 +95,6 @@
     <Compile Include="..\..\Common-MP-TVE3\OsInfo\OSInfo.cs">
       <Link>OSInfo.cs</Link>
     </Compile>
-    <Compile Include="MediaPortal class\CacheSettingsProvider.cs" />
-    <Compile Include="MediaPortal class\Config.cs" />
     <Compile Include="InstallationChecks\AresSkinMPEInstall.cs" />
     <Compile Include="InstallationChecks\LAVFilterMPEInstall.cs" />
     <Compile Include="InstallationChecks\MPEInstall.cs" />
@@ -153,10 +151,6 @@
     <Compile Include="ManualDownload.Designer.cs">
       <DependentUpon>ManualDownload.cs</DependentUpon>
     </Compile>
-    <Compile Include="MediaPortal class\ISettingsPrefetchable.cs" />
-    <Compile Include="MediaPortal class\ISettingsProvider.cs" />
-    <Compile Include="MediaPortal class\Settings.cs" />
-    <Compile Include="MediaPortal class\XmlSettingsProvider.cs" />
     <Compile Include="MPListView.cs">
       <SubType>Component</SubType>
     </Compile>
