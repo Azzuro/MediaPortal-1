@@ -127,5 +127,10 @@ namespace MediaPortal.DeployTool.Sections
         strSkinUsed = xmlreader.GetValue("skin", "name");
       }
     }
+
+    private void chkAllSkinSetup_CheckedChanged(object sender, EventArgs e)
+    {
+
+    }
   }
 }
