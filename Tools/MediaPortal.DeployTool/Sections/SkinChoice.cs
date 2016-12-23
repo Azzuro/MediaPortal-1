@@ -18,10 +18,8 @@
 
 #endregion
 
-using MediaPortal.Profile;
 using System;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace MediaPortal.DeployTool.Sections
 {
@@ -117,16 +115,7 @@ namespace MediaPortal.DeployTool.Sections
       pbSkin.Image = null;
       InstallationProperties.Instance.Set("ChosenSkin", "[Existing]");
     }
-    /// <summary>
-    /// load skin used from mediaportal.xml
-    /// </summary>
-    private void GetSkinUsed(string strSkinUsed)
-    {
-      using (Settings xmlreader = new MPSettings())
-      {
-        strSkinUsed = xmlreader.GetValue("skin", "name");
-      }
-    }
+
 
     private void chkAllSkinSetup_CheckedChanged(object sender, EventArgs e)
     {
