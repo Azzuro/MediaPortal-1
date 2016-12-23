@@ -39,6 +39,21 @@ namespace MediaPortal.DeployTool.InstallationChecks
       FileName = Application.StartupPath + "\\deploy\\" + "Ares.mpe1";
     }
 
+    static string DirSkinPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Team MediaPortal\\MediaPortal\\Skin\\Ares";
+
+    public static bool SkinFolder(bool v)
+    {
+      if (Directory.Exists(DirSkinPath))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+
     public override string GetDisplayName()
     {
       return "Ares Skin" + (OnlineVersion != null ? " " + OnlineVersion.ToString() : "");
@@ -50,7 +65,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
 
       // check if the user selected Ares as default skin, and install it
 
-      if (InstallationProperties.Instance["ChosenSkin"] == "Ares")
+      if (InstallationProperties.Instance["ChosenSkin"] == "Ares" || SkinFolder(true))
       {
 
         // check if mpe package is installed
@@ -64,6 +79,10 @@ namespace MediaPortal.DeployTool.InstallationChecks
             {
 
               result.state = CheckState.NOT_INSTALLED; // always install skin setup 
+            }
+            else if(SkinFolder(true))
+              {
+              result.state = CheckState.VERSION_MISMATCH;
             }
             else
             {
@@ -81,7 +100,6 @@ namespace MediaPortal.DeployTool.InstallationChecks
         }
       }
       else
-
       {
         result.state = CheckState.SKIPPED;
         return result;
