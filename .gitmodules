@@ -7,3 +7,8 @@
 [submodule "skin/Ares"]
 	path = skin/Ares
 	url = https://github.com/Azzuro/Ares-for-MP1.git
+	branch = master
+[submodule "skin/DefaultWideHD"]
+	path = skin/DefaultWideHD
+	url = https://github.com/MediaPortal/MP1-Skin-DefaultWideHD.git
+	branch = master

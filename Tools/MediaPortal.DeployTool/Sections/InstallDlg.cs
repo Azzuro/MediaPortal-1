@@ -187,8 +187,9 @@ namespace MediaPortal.DeployTool.Sections
           AddPackageToListView(new TvServerChecker());
           AddPackageToListView(new TvPluginChecker());
           AddPackageToListView(new LAVFilterMPEInstall());
+          AddPackageToListView(new DFWHDSkinMPEInstall());
           AddPackageToListView(new AresSkinMPEInstall());
-                    break;
+          break;
 
         case "tvserver_master":
           if (InstallationProperties.Instance["DBMSType"] == "msSQL2005")
@@ -202,14 +203,16 @@ namespace MediaPortal.DeployTool.Sections
           AddPackageToListView(new MediaPortalChecker());
           AddPackageToListView(new TvPluginChecker());
           AddPackageToListView(new LAVFilterMPEInstall());
-         AddPackageToListView(new AresSkinMPEInstall());
-                    break;
+         AddPackageToListView(new DFWHDSkinMPEInstall());
+          AddPackageToListView(new AresSkinMPEInstall());
+          break;
 
         case "mp_only":
           AddPackageToListView(new MediaPortalChecker());
           AddPackageToListView(new LAVFilterMPEInstall());
+          AddPackageToListView(new DFWHDSkinMPEInstall());
           AddPackageToListView(new AresSkinMPEInstall());
-                    break;
+          break;
 
         case "download_only":
           AddPackageToListView(new MediaPortalChecker());
@@ -218,11 +221,12 @@ namespace MediaPortal.DeployTool.Sections
           AddPackageToListView(new TvServerChecker());
           AddPackageToListView(new TvPluginChecker());
           AddPackageToListView(new LAVFilterMPEInstall());
+          AddPackageToListView(new DFWHDSkinMPEInstall());
           AddPackageToListView(new AresSkinMPEInstall());
 
 
 
-                    break;
+          break;
       }
       if ((InstallationProperties.Instance["ConfigureMediaPortalFirewall"] == "1" ||
            InstallationProperties.Instance["ConfigureTVServerFirewall"] == "1") &&
