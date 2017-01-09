@@ -33,8 +33,8 @@ namespace MediaPortal.DeployTool.InstallationChecks
     public AresSkinMPEInstall()
     {
       MpeId = "24cd3916-41a8-4622-8c2a-c0b543b57f03"; // ID set by azzuro installer
-      MpeURL = "https://www.dropbox.com/s/xw7m9abwq9qmnid/Ares.mpe1?dl=1"; // based on dropbox URL
-      MpeUpdateURL = "https://www.dropbox.com/s/t92ws4qjuu8tq2k/Aresupdate.xml?dl=1"; // based on dropbox URL
+      MpeURL = "https://www.team-mediaportal.com/index.php?option=com_mtree&task=att_download&link_id=363&cf_id=24";
+      MpeUpdateURL = "https://raw.githubusercontent.com/Wizard123/Ares-for-MP1/master/update.xml";
       MpeUpdateFile = Application.StartupPath + "\\deploy\\" + "Aresupdate.xml";
       FileName = Application.StartupPath + "\\deploy\\" + "Ares.mpe1";
     }

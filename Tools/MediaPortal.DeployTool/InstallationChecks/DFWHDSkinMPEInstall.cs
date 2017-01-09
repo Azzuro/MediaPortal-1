@@ -32,9 +32,9 @@ namespace MediaPortal.DeployTool.InstallationChecks
 
     public DFWHDSkinMPEInstall()
     {
-      string MPversion = Convert.ToString(Utils.GetCurrentPackageVersion()) + ".0";
-      MpeId = "922354ea-14e1-42dd-92af-496e2ac999db"; 
-      MpeURL = "https://github.com/MediaPortal/MP1-Skin-DefaultWideHD/raw/master/Release/DFWHD_" + MPversion + ".mpe1"; 
+      string MPversion = Convert.ToString(Utils.GetCurrentPackageVersion()) + ".0"; //get MP version being installed
+      MpeId = "922354ea-14e1-42dd-92af-496e2ac999db";
+      MpeURL = "https://github.com/MediaPortal/MP1-Skin-DefaultWideHD/releases/download/" + MPversion + "/DFWHD_" + MPversion + ".mpe1";
       MpeUpdateURL = "https://raw.githubusercontent.com/MediaPortal/MP1-Skin-DefaultWideHD/master/DFWHDupdate.xml";
       MpeUpdateFile = Application.StartupPath + "\\deploy\\" + "DFWHDupdate.xml";
       FileName = Application.StartupPath + "\\deploy\\" + "DFWHD_" + MPversion + ".mpe1";
@@ -79,7 +79,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
             if ((vMpeInstalled >= OnlineVersion || vMpeInstalled <= OnlineVersion) && File.Exists(FileName))
             {
 
-              result.state = CheckState.NOT_INSTALLED; // always install skin setup 
+              result.state = CheckState.NOT_INSTALLED; // always install skin setup
             }
             else if(SkinFolder(true))
               {
