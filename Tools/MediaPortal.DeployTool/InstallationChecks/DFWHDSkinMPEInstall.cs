@@ -64,7 +64,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
     {
       CheckResult result = default(CheckResult);
 
-      // check if the user selected Ares as default skin, and install it
+      // check if the user selected DefaultWideHD as default skin, and install it
 
       if (InstallationProperties.Instance["ChosenSkin"] == "DefaultWideHD" || SkinFolder(true))
       {
