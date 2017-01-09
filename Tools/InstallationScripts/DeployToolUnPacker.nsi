@@ -67,12 +67,18 @@
 ; comment one of the following lines to disable the preBuild
 !define BUILD_MediaPortal
 !define BUILD_TVServer
-!define BUILD_Skin
 !define BUILD_DeployTool
 !define BUILD_Installer
 
 !include "include-MP-PreBuild.nsh"
 
+#---------------------------------------------------------------------------
+# BUILD / INCLUDE SKIN DURING BUILD PROCESS 
+#---------------------------------------------------------------------------
+; comment one of the following lines to disable the preBuild
+
+!define BUILD_Skin
+;!define INCLUDE_Skin
 
 #---------------------------------------------------------------------------
 # INCLUDE FILES
@@ -93,6 +99,10 @@ Section
 #Ares Installer
 !define AresPath "${SkinRoot}\Ares"
 !include "${AresPath}\Ares_setup.nsh"
+
+#DefaultWideHD Installer
+!define DFWHDPath "${SkinRoot}\DefaultWideHD"
+!include "${AresPath}\DFWHD_build.nsh"
 
 SectionEnd
 !endif
@@ -159,12 +169,18 @@ Section
 
 SectionEnd
 
-;sections for unpacking skin installer
+# SKIN INCLUDE EXTENSION PACKAGE INSIDE MP PACKAGE
+!ifdef INCLUDE_Skin
 Section
 SetOutPath $INSTDIR\deploy
+
+# Ares skin
   File "${AresPath}\Ares.mpe1"
-  
+# DefaultWideHD skin
+  File "${AresPath}\DFWHD.mpe1"
+ 
 SectionEnd
+!endif
 
 Function CheckAndDownloadDotNet45
 # Let's see if the user has the .NET Framework 4.5 installed on their system or not
