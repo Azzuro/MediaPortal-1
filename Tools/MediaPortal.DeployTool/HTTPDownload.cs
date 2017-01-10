@@ -64,7 +64,7 @@ namespace MediaPortal.DeployTool
 #endif
 
       client.Proxy.Credentials = CredentialCache.DefaultCredentials;
-      client.Headers.Add("user-agent", @"Mozilla/4.0 (compatible; MSIE 7.0;" + userAgentOs);
+      client.Headers.Add("user-agent", @"Mozilla/5.0 (compatible; MSIE 7.0;" + userAgentOs);
       client.DownloadProgressChanged += client_DownloadProgressChanged;
       client.DownloadFileCompleted += client_DownloadFileCompleted;
       client.DownloadFileAsync(new Uri(url), targetFile);
