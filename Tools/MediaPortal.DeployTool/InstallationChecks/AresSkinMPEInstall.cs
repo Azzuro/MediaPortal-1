@@ -32,10 +32,10 @@ namespace MediaPortal.DeployTool.InstallationChecks
 
     public AresSkinMPEInstall()
     {
-      MpeId = "24cd3916-41a8-4622-8c2a-c0b543b57f03"; // ID set by azzuro installer
+      MpeId = "805a38ec-6dd4-4b2c-9b65-55e680da24cc"; // Offcial ID set by wizard
       MpeURL = "https://www.team-mediaportal.com/index.php?option=com_mtree&task=att_download&link_id=363&cf_id=24";
       MpeUpdateURL = "https://raw.githubusercontent.com/Wizard123/Ares-for-MP1/master/update.xml";
-      MpeUpdateFile = Application.StartupPath + "\\deploy\\" + "Aresupdate.xml";
+      MpeUpdateFile = Application.StartupPath + "\\deploy\\" + "update.xml";
       FileName = Application.StartupPath + "\\deploy\\" + "Ares.mpe1";
     }
 
@@ -108,7 +108,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
 
       if (InstallationProperties.Instance["InstallType"] == "download_only")
       {
-        result.state = result.needsDownload == false ? CheckState.DOWNLOADED : CheckState.NOT_DOWNLOADED;
+        result.state = result.needsDownload == true ? CheckState.DOWNLOADED : CheckState.NOT_DOWNLOADED;
       }
 
       return result;

@@ -109,7 +109,7 @@ namespace MediaPortal.DeployTool.InstallationChecks
 
       if (InstallationProperties.Instance["InstallType"] == "download_only")
       {
-        result.state = result.needsDownload == false ? CheckState.DOWNLOADED : CheckState.NOT_DOWNLOADED;
+        result.state = result.needsDownload == true ? CheckState.DOWNLOADED : CheckState.NOT_DOWNLOADED;
       }
 
       return result;
