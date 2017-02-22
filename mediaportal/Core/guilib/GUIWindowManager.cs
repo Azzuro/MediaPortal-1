@@ -49,6 +49,14 @@ namespace MediaPortal.GUI.Library
 
     private static Stopwatch clockWatchMadVr = new Stopwatch();
 
+    #region Value before/after Route
+
+    private string _selecteditem = string.Empty;
+    private string _selectedindex = string.Empty;
+    private string _highlightedbutton = string.Empty;
+
+    #endregion
+
     #region Frame limiting code
 
     private static void WaitForFrameClock()
@@ -1506,6 +1514,10 @@ namespace MediaPortal.GUI.Library
           GUIPropertyManager.SetProperty("#currentmodule", _currentWindowName);
         }
 
+        _selecteditem = GUIPropertyManager.GetProperty("#selecteditem");
+        _selectedindex= GUIPropertyManager.GetProperty("#selectedindex");
+        _highlightedbutton= GUIPropertyManager.GetProperty("#highlightedbutton");
+
         _routedWindow = null;
         _shouldRefresh = true;
       }
@@ -1520,6 +1532,10 @@ namespace MediaPortal.GUI.Library
         Log.Debug("WindowManager: route {0}:{1}->{2}:{3}",
                   GetWindow(ActiveWindow), ActiveWindow, _routedWindow, dialogId);
         _currentWindowName = GUIPropertyManager.GetProperty("#currentmodule");
+
+        GUIPropertyManager.SetProperty("#selecteditem", _selecteditem);
+        GUIPropertyManager.SetProperty("#selectedindex", _selectedindex);
+        GUIPropertyManager.SetProperty("#highlightedbutton",_highlightedbutton);
       }
     }
 
