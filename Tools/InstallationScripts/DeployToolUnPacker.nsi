@@ -78,7 +78,7 @@
 ; comment one of the following lines to disable the preBuild
 
 !define BUILD_Skin
-;!define INCLUDE_Skin
+!define INCLUDE_Skin
 
 #---------------------------------------------------------------------------
 # INCLUDE FILES
