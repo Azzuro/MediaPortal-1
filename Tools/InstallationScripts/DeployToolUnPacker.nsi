@@ -102,7 +102,7 @@ Section
 
 #DefaultWideHD Installer
 !define DFWHDPath "${SkinRoot}\DefaultWideHD"
-!include "${AresPath}\DFWHD_build.nsh"
+!include "${DFWHDPath}\DFWHD_build.nsh"
 
 SectionEnd
 !endif
@@ -177,7 +177,7 @@ SetOutPath $INSTDIR\deploy
 # Ares skin
   File "${AresPath}\Ares.mpe1"
 # DefaultWideHD skin
-  File "${AresPath}\DFWHD.mpe1"
+  File "${DFWHDPath}\DFWHD.mpe1"
  
 SectionEnd
 !endif
